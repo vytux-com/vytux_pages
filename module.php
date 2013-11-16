@@ -212,6 +212,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			}
 
 			echo '<form name="pages" method="post" action="#">';
+			echo WT_Filter::getCsrf();
 			echo '<input type="hidden" name="save" value="1">';
 			echo '<input type="hidden" name="block_id" value="', $block_id, '">';
 			echo '<table id="faq_module">';
