@@ -1,5 +1,9 @@
 <?php
-//	webtrees - simpl_pages module
+// webtrees - vytux_pages module based on simpl_pages
+//
+// Copyright (C) 2013 Vytautas Krivickas and vytux.com. All rights reserved.
+//
+// Copyright (C) 2012 Nigel Osborne and kiwtrees.net. All rights reserved.
 //
 // webtrees: Web based Family History software
 // Copyright (C) 2012-2012 webtrees development team.
@@ -18,20 +22,17 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
-//
-//	Copyright (C) 2012 Nigel Osborne and kiwtrees.net. All rights reserved.
-//
 
 if (!defined('WT_WEBTREES')) {
 	header('HTTP/1.0 403 Forbidden');
 	exit;
 }
 
-class simpl_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Module_Block, WT_Module_Config {
+class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Module_Block, WT_Module_Config {
 
 	// Extend class WT_Module
 	public function getTitle() {
-		return WT_I18N::translate('Simpl_pages');
+		return WT_I18N::translate('Vytux_pages');
 	}
 
 	public function getMenuTitle() {
