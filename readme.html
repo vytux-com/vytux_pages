@@ -1,0 +1,98 @@
+<?php
+//	webtrees - simpl_pages module
+//
+//	Copyright (C) 2012 Nigel Osborne and kiwtrees.net. All rights reserved.
+//
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Simpl_pages ReadMe file</title>
+<style type="text/css">
+	body { color: black; background-color: white; font: 14px tahoma arial helvetica sans-serif;	padding:10px; }
+	.container {width:200px; margin:20px auto; text-align:center;float:right}
+	.shadow {background-color:#ccc; }
+	.content {background-color:AntiqueWhite; border:1px solid #000; padding:0.5em;}
+	.content, .shadow {position:relative; bottom:4px; right:4px;}
+	span.pointer {color:green; font-style:italic;}
+	a {color: #81A9CB; font-weight: normal; text-decoration: none;}
+	a:hover {color: #81A9CB;}
+	a img {border:none;}
+	h1 {color: #81A9CB; font-weight:normal;}
+	h3 { font-size:16px; font-weight:bold; margin: 14px 0; }
+	li {line-height:150%;}
+	.back {color: #81A9CB; float:right;}
+	dl dt {font-weight: bold;}
+</style>
+</head><body>
+<div class="container"><div class="shadow"><div class="content">Get other "Simpl" add-ons for <b>webtrees</b> at <a href="http://kiwitrees.net/simpl-add-ons/" title="kiwitrees.net">kiwitrees.net<br /><img src="images/simpl_2.png"></a></div></div></div>
+<a name="top"><h1><img src="images/simpl_1.png" align="middle">ReadMe file - "Simpl_pages" for <b>webtrees</b></h1></a>
+<h2>CONTENTS</h2>
+<ol>
+	<li><a href="#require">REQUIREMENTS</a></li>
+	<li><a href="#install">INSTALLATION</a></li>
+	<li><a href="#setup">SETUP</a></li>
+	<li><a href="#upgrading">UPGRADING</a></li>
+	<li><a href="#faq">FAQs</a></li>
+</ol>
+<hr width="100%">
+<!-- REQUIREMENTS -->
+<div style="float:left;"><a name="require"><h3>REQUIREMENTS</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
+This module requires <b>webtrees</b> version 1.4.0 or later.
+<hr width="100%">
+<!-- INSTALLATION -->
+<div style="float:left;"><a name="install"><h3>INSTALLATION</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
+<img style="border:1px solid grey;" src="images/simpl_pages_menu.png" align="right" hspace="20" vspace="10">
+<ol>
+	<li>Unzip the files and upload them to the <b>webtrees</b> /modules_v<font color="red">X</font>/ folder on your web server. (Note: "<font color="red">X</font>" = "3" at the time of writing this, but may change in future releases)</li>
+	<li>Login to <b>webtrees</b> as administrator, go to <span class="pointer">Administration<img src="images/arrow_right.png"/>Modules</span>, and find the module. It will be called "Simpl_pages". Check it has a tick for "Enabled"</li>
+	<li>Next go to the "Menus" tab. Set the access level and position for the menu item to suit your preference. It will probably have defaulted to "Show only to managers".</li>
+	<li>Finally click SAVE, to complete the basic installation. </li>
+</ol>
+<p>If you now refresh your Administration page you will see a new menu item near the bottom, as shown to the right here. You will need to use that during the "Setup" part of the installation process.</p>
+<hr width="100%">
+<!-- SETUP -->
+<div style="float:left;"><a name="setup"><h3>SETUP</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
+<p>Creating "pages" is much the same as creating FAQs. This module borrows a lot of the same code. The page contents are stored in the webtrees database, as "block settings". They are created by going to the "Simpl_pages" menu option in Administration (<span class="pointer">Administration<img src="images/arrow_right.png"/>Simpl_pages</span>) then click on "Add pages" to display the following screen.</li>
+<div style="padding:20px;text-align:center;"><img style="border:1px solid grey;" src="images/page_2.png"></div></p>
+<ol>
+	<li>Give each page a title. Remember this will be used as both the menu item for this page and its display tab so it is important to keep these titles short.</li>
+	<li>Enter your page contents in the main "Content" area. You can include any formatting you wish, images, links, pretty much whatever you want.</li> 
+	<li>Set the access level, to determine which groups of users can see this page.</li>
+	<li>Choose which languages to display this page for. This is the same as other similar options throughout webtrees. Select NONE of the available languages if you want it to dispay in ALL languages. Only select single languages if you are aslo planning to offer a similar translated version for other languages.</li>
+	<li>Set the page position, relative to any other pages you might have already created. This determines where on both the menu list and tabs this page appears. It can be changed later by simply using the "drag'n drop" feature of the page list on the Simpl_pages administration screen. The first item will aslo be the default when the main "pages" menu items is clicked.</li>
+	<li>Use "page visibility" to set if this page if to be seen when viewing all family trees on your site, or just the current one.</li>
+	<li>Click "Save" to complete this process and create your page page.
+</ol>	
+	</li>
+	<h3>Optional changes</h3>
+		<ol style="list-style-type:lower-alpha;">
+			<li>Overall pages title: by default set to "Resource pages", this can be changed at row 317 of simpl_pages/module.php.</li>
+			<li>Menu item title: this is taken from the title of the module. By default it is "Resources". That can be changed in simpl_pages/module.php, at row 38.</li>
+			<li>Menu item icons: this module uses different icons for each theme, stored in the modules <i>themes/webtrees (or clouds, colors, xenea etc)</i> folder. If you want to use a different image, simply replace the one provided with your own, of an appropriate size for your preferred theme, but keeping the name the same.</li>
+			<li>General design of fonts, colors, etc: change these in all or any of the simple_pages/themes/webtrees (or clouds, colors, xenea etc)/style.css file.</li>
+			<li>You can add an overall heading to your "Resource pages" page. Add it between the apostrophes in row 314 of simpl_pages/module.php using any basic HTML tags as necessary.</li>
+		</ol>
+	</li>
+<hr width="100%">
+<!-- UPGRADING -->
+<div style="float:left;"><a name="upgrading"><h3>Upgrading</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
+<p>To upgrade from a from a previous version of simple_pages simply copy the new version over the old. This will preserve any custom images you might have added for your menus. None of your original pages will be affected in any way.</p>
+<hr width="100%">
+<!-- FAQs -->
+<div style="float:left;"><a name="faq"><h3>FAQs</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
+Here are a few questions / answers that might help....
+<br /><br />
+<dl>
+	<dt>What language translations will this work with?</dt>
+		<dd>Where possible simpl_pages uses existing webtrees language items. These will therefore translate automatically wherever they are used. As far as possible we have included new language items in the same "WT_I18N::translate()" format. This means you can translate these into any other language using webtrees "custom translation" feature, descibed here: <a href="http://wiki.webtrees.net/Custom_Translation" title="webtrees WIKI - Custom Translation">Wiki: Custom translation</a></dd>
+	<dt>Will this work with any theme?</dt>
+		<dd>It has been tested in the standard themes, and works fine EXCEPT "colors" which has a unique menu system not well suited to customisation.</dd>
+		<dd>The only other issues arise if you try to have too many "pages" AND display the result on a small monitor. We cannot comment on how it might work in any custom theme you might use, but the key layout features are in the module's own css files so if you are able to create a custom theme, you should have no problem adding your own css to match.</dd>
+		<dd>This is a "Simple" module, and so is not designed to function with the complexity of multiple different themes on one site. To utilise it best, select one theme for your site and do not offer users any alternatives.</dd>
+	<dt>Is it compatible with all browsers?</dt>
+		<dd>Not likely to work well with any version of Internet Explorer older than IE8; but all modern browsers should be OK. Tested in current versions (as at 10 Feb 2012) of IE, Safari(pc only), Opera, Chrome, Firefox.</dd>
+</dl>
+<hr width="100%">
+</body>
+</html>
