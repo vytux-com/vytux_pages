@@ -1,85 +1,320 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Vytux_pages ReadMe file</title>
-<style type="text/css">
-	body { color: black; background-color: white; font: 14px tahoma arial helvetica sans-serif;	padding:10px; }
-	.container {width:200px; margin:20px auto; text-align:center;float:right}
-	.shadow {background-color:#ccc; }
-	.content {background-color:AntiqueWhite; border:1px solid #000; padding:0.5em;}
-	.content, .shadow {position:relative; bottom:4px; right:4px;}
-	span.pointer {color:green; font-style:italic;}
-	a {color: #81A9CB; font-weight: normal; text-decoration: none;}
-	a:hover {color: #81A9CB;}
-	a img {border:none;}
-	h1 {color: #81A9CB; font-weight:normal;}
-	h3 { font-size:16px; font-weight:bold; margin: 14px 0; }
-	li {line-height:150%;}
-	.back {color: #81A9CB; float:right;}
-	dl dt {font-weight: bold;}
+<!DOCTYPE HTML PUBLIC "//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>vytux_pages for webtrees 1.5 Readme</title>
+<script>
+function Link(URL)
+{
+window.location = URL;
+}
+</script>
+<style>
+/***************************************************/
+/* MINIMAL STYLES */
+/* The following section defines styles that every HTML Help project should
+need. */
+/* The default style of P is red to alert you that you need to apply a style
+class, such as Body. */
+P { margin-top:6.00pt; margin-bottom:6.00pt; font-family:Verdana; font-size:8pt;
+color: #FF0000; }
+BR { font-size:4.00pt; }
+/* Use H1 for all topic headings. */
+H1 { margin-top:3.00pt; margin-bottom:3.00pt; font-family:Verdana;
+font-size:12pt; font-weight:bold; }
+/* Use H2 for second-level headings. */
+H2 { margin-top:9.00pt; margin-bottom:3.00pt; font-family:Verdana;
+font-size:10pt; font-weight:bold; }
+/* Use H3 for third-level headings. */
+H3 { margin-top:6.00pt; margin-bottom:3.00pt; font-family:Verdana;
+font-size:8pt; font-weight:bold; }
+/* Use H4 for fourth-level headings. */
+H4 { margin-top:3.00pt; margin-bottom:3.00pt; font-family:Verdana;
+font-size:8pt; font-weight:bold; }
+/* H5 and H6 have the same definition as H4 because you should not need this
+level of heading in one topic. If you need to use H5 or H6, consider breaking up
+your topic into more than one topic. */
+H5 { margin-top:3.00pt; margin-bottom:3.00pt; font-family:Verdana;
+font-size:8pt; font-weight:bold; }
+H6 { margin-top:3.00pt; margin-bottom:3.00pt; font-family:Verdana;
+font-size:8pt; font-weight:bold; }
+/* Use the Body style class for normal paragraphs. */
+P.Body { margin-top:6.00pt; margin-bottom:6.00pt; font-family:Verdana;
+font-size:8pt; color:black; }
+/* Use the Anchor style class for graphic references on a line by themselves. */
+P.Anchor { margin-top:6.00pt; margin-bottom:6.00pt; font-family:Verdana;
+font-size:10pt; color:black; }
+/* Use the Indent style classes to indent a paragraph. If you need to indent
+text below a list item, use <br><br> to start the new paragraph within the same
+set of <li></li> tags. If you need to indent a list within another list, nest
+the indented list within the first list's set of <ol></ol> or <ul></ul> tags. */
+P.Indent1 { margin-left:12.00pt; margin-top:6.00pt; margin-bottom:3.00pt;
+font-family:Verdana; font-size:8pt; color:black; }
+P.Indent2 { margin-left:24.00pt; margin-top:6.00pt; margin-bottom:3.00pt;
+font-family:Verdana; font-size:8pt; color:black; }
+P.Indent3 { margin-left:36.00pt; margin-top:6.00pt; margin-bottom:3.00pt;
+font-family:Verdana; font-size:8pt; color:black; }
+/* Use the LI style for all list items. */
+LI { margin-top:3.00pt; margin-bottom:3.00pt; font-family:Verdana;
+font-size:8pt; color:black; }
+/* Use the OL style for numbered lists. You do not have to type the number for
+each list item in a numbered list. */
+OL { margin-left:18.00pt; margin-top:3.00pt; margin-bottom:3.00pt;
+text-indent:0pt; font-family:Verdana; font-size:8pt; color:black;
+list-style-type: decimal; }
+/* Use the EquationNum style class for numbered lists of equations. You do not
+have to type the number for each list item in a numbered list. */
+OL.EquationNum { margin-left:36.00pt; margin-top:3.00pt; margin-bottom:3.00pt;
+text-indent:0pt; font-family:Verdana; font-size:8pt; color:black;
+list-style-type: decimal; }
+/* Use the List-abc style class for lettered lists. You do not have to type the
+letter for each list item in a lettered list. */
+OL.List-abc { margin-left:18.00pt; margin-top:3.00pt; margin-bottom:3.00pt;
+text-indent:0pt; font-family:Verdana; font-size:8pt; color:black;
+list-style-type:lower-alpha; }
+/* Use the UL style for bulleted lists. You do not have to type the bullet for
+each list item in a bulleted list. */
+UL { margin-left:12.00pt; text-indent:0pt; margin-top:3.00pt;
+margin-bottom:3.00pt; font-family:Verdana; font-size:8pt; color:black;
+list-style-type: disc; }
+/* Use the List-Box style class for bulleted lists with boxes instead of
+bullets. You do not have to type the box for each list item in a box list. */
+UL.List-Box { margin-left:12.00pt; margin-top:3.00pt; margin-bottom:3.00pt;
+text-indent:0pt; font-family:Verdana; font-size:8pt; color:black;
+list-style-type: square; }
+/* Use the List-Diamond style class for bulleted lists with diamonds instead of
+bullets. You do not have to type the diamond for each list item in a diamond
+list. */
+UL.List-Diamond { margin-left:12.00pt; margin-top:3.00pt; margin-bottom:3.00pt;
+text-indent:0pt; font-family:Verdana; font-size:8pt; color:black;
+list-style-image:url(diamond.gif); }
+/* Use the List-Hyphen style class for bulleted lists with hyphens instead of
+bullets. You do not have to type the hyphen for each list item in a hyphen list.
+*/
+UL.List-Hyphen { margin-left:12.00pt; margin-top:3.00pt; margin-bottom:3.00pt;
+text-indent:0pt; font-family:Verdana; font-size:8pt; color:black;
+list-style-image:url(hyphen.gif); }
+/* Use the Borderless style class for tables that do not need borders, such as
+for 2-column or 3-column lists with no headings. */
+Table.Borderless { border:none; }
+/* Use the Bordered style class for tables that need borders. */
+Table.Bordered { border-width: 1pt; border-style: solid; border-color: black;
+border-collapse: collapse; }
+/* Use the Borderless-Wide style class for tables that do not need borders and
+that you want to stretch to fill the entire topic width. */
+Table.Borderless-Wide { border:none; width:100%; }
+/* Use the Bordered-Wide style class for tables that need borders and that you
+want to stretch to fill the entire topic width. */
+Table.Bordered-Wide { border-width: 1pt; border-style: solid; border-color:
+black; width:100%; border-collapse: collapse; }
+/* Use the TD style for table cells in Borderless or Borderless-Wide tables. */
+TD { font-family:Verdana; font-size:8pt; color:black; vertical-align:top;
+padding:3px; }
+/* Use the Bordered style class for table cells in Bordered or Bordered-Wide
+tables. */
+TD.Bordered { font-family:Verdana; font-size:8pt; color:black;
+vertical-align:top; border-width: 1pt; border-style: solid; border-color: black;
+}
+/* Use the Icon style class for table cells that contain note, caution, warning,
+or tip icons, or LabVIEW datatype terminals. */
+TD.Icon { width:40px; vertical-align:top; }
+/* Use the Table-cell-8pt style class for table cells in tables that contain a
+lot of information and need smaller text to fit it all on one screen to prevent
+a horizontal scroll bar from appearing. */
+TD.Table-cell-8pt { font-family:Verdana; font-size:7pt; color:black; }
+/* Use the TH style for table heading cells in Borderless or Borderless-Wide
+tables. */
+TH { font-family:Verdana; font-size:8pt; color:black; font-weight:bold;
+padding:3px; }
+/* Use the Bordered style class for table heading cells in Bordered or
+Bordered-Wide tables. */
+TH.Bordered { font-family:Verdana; font-size:8pt; color:black; font-weight:bold;
+border-width: 1pt; border-style: solid; border-color: black; }
+/* Use the Table-cell-8pt style class for table heading cells in tables that
+contain a lot of information and need smaller text to fit it all on one screen
+to prevent a horizontal scroll bar from appearing. */
+TH.Table-Head-8pt { font-family:Verdana; font-size:7pt; color:black;
+font-weight:bold; }
+/* Use the Left-Align style class for table heading cells that you want to left
+align instead of center align. */
+TH.Left-Align { font-family:Verdana; font-size:8pt; color:black;
+font-weight:bold; padding:3px; text-align:left; }
+/***************************************************/
+/* CHARACTER FORMATS */
+/* The following section defines character formats that every HTML Help project
+should need. */
+/* Use the Dark-Red format for warnings or cautions. */
+#Dark-Red { color: #800000 }
+/* Use the Monospace format for code or syntax examples. */
+#Monospace { font-family: Courier New; font-size: 8pt; }
+/* Use the Monospace-Bold format for messages and responses that the computer
+automatically prints to the screen. */
+#Monospace-Bold { font-family: Courier New; font-size: 8pt; font-weight: bold; }
+/* Use the Monospace-Italic format to denote text that is a placeholder for a
+word or value that the user must supply. */
+#Monospace-Italic { font-family: Courier New; font-size: 8pt; font-style:
+italic; }
+/* Use the Platform format to denote a specific platform. */
+#Platform { color: #0000FF; font-weight: bold; }
+/* Use the Symbol format for characters not in the Verdana character set. Use
+this format sparingly. When possible, you should use the correct ASCII code for
+the symbol or use a graphic to recreate the symbol. */
+#Symbol { font-family: Symbol; font-size: 8pt; }
+/* CHARACTER FORMATS Updated to conform with the CSE HTML Validator Pro */
+/* The following section defines character formats that every HTML Help project
+should need. */
+/* Use the Dark-Red format for warnings or cautions. */
+.Dark-Red { color: #800000 }
+/* Use the Monospace format for code or syntax examples. */
+.Monospace { font-family: Courier New; font-size: 8pt; }
+/* Use the Monospace-Bold format for messages and responses that the computer
+automatically prints to the screen. */
+.Monospace-Bold { font-family: Courier New; font-size: 8pt; font-weight: bold; }
+/* Use the Monospace-Italic format to denote text that is a placeholder for a
+word or value that the user must supply. */
+.Monospace-Italic { font-family: Courier New; font-size: 8pt; font-style:
+italic; }
+/* Use the Platform format to denote a specific platform. */
+.Platform { color: #0000FF; font-weight: bold; }
+/* Use the Symbol format for characters not in the Verdana character set. Use
+this format sparingly. When possible, you should use the correct ASCII code for
+the symbol or use a graphic to recreate the symbol. */
+.Symbol { font-family: Symbol; font-size: 8pt; }
+/* Use the Red-text format to call attention to text that needs information
+added or edited by techcomm */
+.Red-text {color: #FF0000;}
+/* Use the Green-Underline format for the green defintion in the conventions
+topic */
+.Green-Underline {color: #007700; text-decoration : underline;}
+/* Use the glossButton format for the glossary buttons used in the glossary
+topic */
+.glossButton { font-family:Verdana, sans-serif; font-size:12px; color:black; }
+/* Use for text sections and hyphenated words that should not break at line
+wraps */
+span.nobreak{white-space:nowrap}
+/* The following styles define the color of links. */
+a:link { color: #007700 }
+a:hover { color: #FF0000 }
+a:active { color: #FF0000 }
+a:visited { color: #7F007F }
+/***************************************************/
+/* ACTIVITY STYLES */
+/* The following section defines styles that only tutorial-style HTML Help
+projects should need. */
+/* Use the Activity-Objective style class for the objective at the beginning of
+an activity topic. */
+H3.Activity-Objective { color: #800000; }
+/***************************************************/
+/* CODE STYLES */
+/* The following section defines styles that you need to format entire sections
+of code or syntax examples. If you have just a few words you need to format as a
+code or syntax example, use the Monospace character format. */
+P.Code { margin-top:3.00pt; margin-bottom:0.00pt; font-family:Courier New;
+font-size:8pt; color:black; }
+P.Code1 { margin-left:12.00pt; margin-top:3.00pt; margin-bottom:0.00pt;
+font-family:Courier New; font-size:8pt; color:black; }
+P.Code2 { margin-left:24.00pt; margin-top:3.00pt; margin-bottom:0.00pt;
+font-family:Courier New; font-size:8pt; color:black; }
+P.Code3 { margin-left:36.00pt; margin-top:3.00pt; margin-bottom:0.00pt;
+font-family:Courier New; font-size:8pt; color:black; }
+/***************************************************/
+/* FUNCTION STYLES */
+/* The following section defines styles that you might need to format function
+reference help. */
+P.F-VI-Code4 { margin-left:48.00pt; margin-top:3.00pt; margin-bottom:0.00pt;
+font-family:Courier New; font-size:8pt; color:black; }
+P.F-VI-Code5 { margin-left:60.00pt; margin-top:3.00pt; margin-bottom:0.00pt;
+font-family:Courier New; font-size:8pt; color:black; }
+P.F-VI-Equation { margin-top:9.00pt; margin-bottom:9.00pt; font-family:Verdana;
+font-size:8pt; color:black; }
+OL.F-VI-EquationNum { margin-top:3.00pt; margin-bottom:3.00pt; text-indent:0pt;
+font-family:Verdana; font-size:8pt; color:black; list-style-type: decimal; }
+CITE.expandspot { font-style : normal;
+color : green;
+cursor: hand;}
+.mvd-CITE-expandspot { font-style : normal;
+color : green;
+cursor: hand;}
+DFN.collapsed { font-style : italic;
+font-weight : normal;
+display : 'none';
+color : red;}
+.mvd-DFN-collapsed { font-style : italic;
+font-weight : normal;
+display : 'none';
+color : red;}
+DFN.expanded { font-style : italic;
+font-weight : normal;
+color : red;}
+.mvd-DFN-expanded { font-style : italic;
+font-weight : normal;
+color : red;}
+EM.dropspot { cursor : hand;
+color : green;}
+.mvd-EM-dropspot { cursor : hand;
+color : green;}
 </style>
-</head><body>
-<a name="top"><h1>ReadMe file - "Vytux_pages" for <b>webtrees</b></h1></a>
-<h2>CONTENTS</h2>
+<noscript><p class="Body"><strong>JavaScript (active content) is disabled. For all content to be accessible, you must enable JavaScripts in your browser.</strong></p></noscript>
+</head>
+<body style="background-color: rgb(255, 255, 255);">
+<h1>vytux_pages for webtrees 1.5 Readme</h1>
+<p class="Body">Released: November 2013</p>
+<p class="Body">The readme contains the following main sections:</p>
+<ul>
+<li><a href="#Description">Description</a></li>
+<li><a href="#Require">Requirements</a></li>
+<li><a href="#Installation">Installation</a></li>
+<li><a href="#Setup">Setup</a></li>
+<li><a href="#upgrade">Upgrade</a></li>
+<li><a href="#Support">Contact Support</a></li>
+</ul>
+<a name="Description"></a>
+<h2>Description</h2>
+<p class="Body">After the decision of the original author of the simpl_pages author to not support webtrees version 1.5 I have ported some of these modules to this version of webtrees.</p>
+<p class="Body">This module is used to create additional resource pages to further enhance your webtrees site with additional content.</p>
+<a name="Require"></a>
+<h2>Requirements</h2>
+<p class="Body">This module requires <b>webtrees</b> version 1.5.0 or later.</p>
+<a name="Installation"></a>
+<h2>Installation</h2>
+<p class="Body">This section documents installation instructions for vytux_pages.</p>
 <ol>
-	<li><a href="#require">REQUIREMENTS</a></li>
-	<li><a href="#install">INSTALLATION</a></li>
-	<li><a href="#setup">SETUP</a></li>
-<!--	<li><a href="#upgrading">UPGRADING</a></li> -->
-	<li><a href="#faq">FAQs</a></li>
+<li>Unzip the files and upload them to the <b>webtrees</b> /modules_v<font color="red">X</font>/ folder on your web server. (Note: "<font color="red">X</font>" = "3" at the time of writing this, but may change in future releases)</li>
+<li>Login to <b>webtrees</b> as administrator, go to <span class="pointer">Administration --> Modules</span>, and find the module. It will be called "Vytux_pages". Check it has a tick for "Enabled"</li>
+<li>Next go to the "Menus" tab. Set the access level and position for the menu item to suit your preference. It will probably have defaulted to "Show only to managers".</li>
+<li>Finally click SAVE, to complete the basic installation. </li>
 </ol>
-<hr width="100%">
-<!-- REQUIREMENTS -->
-<div style="float:left;"><a name="require"><h3>REQUIREMENTS</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
-This module requires <b>webtrees</b> version 1.5.0 or later.
-<hr width="100%">
-<!-- INSTALLATION -->
-<div style="float:left;"><a name="install"><h3>INSTALLATION</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
+<p class="Body">If you now refresh your Administration page you will see a new menu item near the bottom of the left column. You will need to use that during the "Setup" part of the installation process.</p>
+<a name="Setup"></a>
+<h2>Setup</h2>
+<p class="Body">Creating "pages" is much the same as creating FAQs. This module borrows a lot of the same code. The page contents are stored in the webtrees database, as "block settings". They are created by going to the "Vytux_pages" menu option in Administration (<span class="pointer">Administration --> Vytux_pages</span>) then click on "Add pages".</li></p>
 <ol>
-	<li>Unzip the files and upload them to the <b>webtrees</b> /modules_v<font color="red">X</font>/ folder on your web server. (Note: "<font color="red">X</font>" = "3" at the time of writing this, but may change in future releases)</li>
-	<li>Login to <b>webtrees</b> as administrator, go to <span class="pointer">Administration --> Modules</span>, and find the module. It will be called "Vytux_pages". Check it has a tick for "Enabled"</li>
-	<li>Next go to the "Menus" tab. Set the access level and position for the menu item to suit your preference. It will probably have defaulted to "Show only to managers".</li>
-	<li>Finally click SAVE, to complete the basic installation. </li>
-</ol>
-<p>If you now refresh your Administration page you will see a new menu item near the bottom, as shown to the right here. You will need to use that during the "Setup" part of the installation process.</p>
-<hr width="100%">
-<!-- SETUP -->
-<div style="float:left;"><a name="setup"><h3>SETUP</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
-<p>Creating "pages" is much the same as creating FAQs. This module borrows a lot of the same code. The page contents are stored in the webtrees database, as "block settings". They are created by going to the "Vytux_pages" menu option in Administration (<span class="pointer">Administration --> Vytux_pages</span>) then click on "Add pages".</li></p>
-<ol>
-	<li>Give each page a title. Remember this will be used as both the menu item for this page and its display tab so it is important to keep these titles short.</li>
-	<li>Enter your page contents in the main "Content" area. You can include any formatting you wish, images, links, pretty much whatever you want.</li> 
-	<li>Set the access level, to determine which groups of users can see this page.</li>
-	<li>Choose which languages to display this page for. This is the same as other similar options throughout webtrees. Select NONE of the available languages if you want it to dispay in ALL languages. Only select single languages if you are aslo planning to offer a similar translated version for other languages.</li>
-	<li>Set the page position, relative to any other pages you might have already created. This determines where on both the menu list and tabs this page appears. It can be changed later by simply using the "drag'n drop" feature of the page list on the Vytux_pages administration screen. The first item will aslo be the default when the main "pages" menu items is clicked.</li>
-	<li>Use "page visibility" to set if this page if to be seen when viewing all family trees on your site, or just the current one.</li>
-	<li>Click "Save" to complete this process and create your page page.
+<li>Give each page a title. Remember this will be used as both the menu item for this page and its display tab so it is important to keep these titles short.</li>
+<li>Enter your page contents in the main "Content" area. You can include any formatting you wish, images, links, pretty much whatever you want.</li> 
+<li>Set the access level, to determine which groups of users can see this page.</li>
+<li>Choose which languages to display this page for. This is the same as other similar options throughout webtrees. Select NONE of the available languages if you want it to dispay in ALL languages. Only select single languages if you are aslo planning to offer a similar translated version for other languages.</li>
+<li>Set the page position, relative to any other pages you might have already created. This determines where on both the menu list and tabs this page appears. It can be changed later by simply using the "drag'n drop" feature of the page list on the Vytux_pages administration screen. The first item will aslo be the default when the main "pages" menu items is clicked.</li>
+<li>Use "page visibility" to set if this page if to be seen when viewing all family trees on your site, or just the current one.</li>
+<li>Click "Save" to complete this process and create your page page.</li>
 </ol>	
-	</li>
-	<h3>Optional changes</h3>
-		<ol style="list-style-type:lower-alpha;">
-			<li>Overall pages title: by default set to "Resource pages", this can be changed at row 317 of vytux_page/module.php.</li>
-			<li>Menu item title: this is taken from the title of the module. By default it is "Resources". That can be changed in vytux_page/module.php, at row 38.</li>
-			<li>Menu item icons: this module uses different icons for each theme, stored in the modules <i>themes/webtrees (or clouds, colors, xenea etc)</i> folder. If you want to use a different image, simply replace the one provided with your own, of an appropriate size for your preferred theme, but keeping the name the same.</li>
-			<li>General design of fonts, colors, etc: change these in all or any of the simple_pages/themes/webtrees (or clouds, colors, xenea etc)/style.css file.</li>
-			<li>You can add an overall heading to your "Resource pages" page. Add it between the apostrophes in row 314 of vytux_page/module.php using any basic HTML tags as necessary.</li>
-		</ol>
-	</li>
-<hr width="100%">
-<!-- FAQs -->
-<div style="float:left;"><a name="faq"><h3>FAQs</h3></a></div><div class="back"><a href="#top">back to top</a></div><div style="clear:both;"></div>
-Here are a few questions / answers that might help....
-<br /><br />
-<dl>
-	<dt>What language translations will this work with?</dt>
-		<dd>Where possible vytux_page uses existing webtrees language items. These will therefore translate automatically wherever they are used. As far as possible we have included new language items in the same "WT_I18N::translate()" format. This means you can translate these into any other language using webtrees "custom translation" feature, descibed here: <a href="http://wiki.webtrees.net/Custom_Translation" title="webtrees WIKI - Custom Translation">Wiki: Custom translation</a></dd>
-	<dt>Will this work with any theme?</dt>
-		<dd>It has been tested in the standard themes, and works fine EXCEPT "colors" which has a unique menu system not well suited to customisation.</dd>
-		<dd>The only other issues arise if you try to have too many "pages" AND display the result on a small monitor. We cannot comment on how it might work in any custom theme you might use, but the key layout features are in the module's own css files so if you are able to create a custom theme, you should have no problem adding your own css to match.</dd>
-		<dd>This is a "Simple" module, and so is not designed to function with the complexity of multiple different themes on one site. To utilise it best, select one theme for your site and do not offer users any alternatives.</dd>
-	<dt>Is it compatible with all browsers?</dt>
-		<dd>Not likely to work well with any version of Internet Explorer older than IE8; but all modern browsers should be OK. Tested in current versions (as at 10 Feb 2012) of IE, Safari(pc only), Opera, Chrome, Firefox.</dd>
-</dl>
-<hr width="100%">
+<h3>Optional changes</h3>
+<ol style="list-style-type:lower-alpha;">
+<li>Overall pages title: by default set to "Resource pages", this can be changed at row 319 of vytux_page/module.php.</li>
+<li>Menu item title: this is taken from the title of the module. By default it is "Resources". That can be changed in vytux_page/module.php, at row 39.</li>
+<li>Menu item icons: this module uses different icons for each theme, stored in the modules <i>themes/webtrees (or clouds, colors, xenea etc)</i> folder. If you want to use a different image, simply replace the one provided with your own, of an appropriate size for your preferred theme, but keeping the name the same.</li>
+<li>General design of fonts, colors, etc: change these in all or any of the simple_pages/themes/webtrees (or clouds, colors, xenea etc)/style.css file.</li>
+<li>You can add an overall heading to your "Resource pages" page. Add it between the apostrophes in row 316 of vytux_page/module.php using any basic HTML tags as necessary.</li>
+</ol>
+<a name="upgrade"></a>
+<h2>Upgrade</h2>
+<p class="Body">Unfortunately even though this module is based on simpl_pages it cannot transfer the existing pages automatically. Therefore you will need to delete the old simpl_pages module and re-create the pages.</p>
+<a name="Support"></a>
+<h2>Contact Support</h2>
+<p class="Body">You can contact our support staff by one of the following:</p>
+<p class="Body"><span style="font-weight: bold;">Email:&nbsp;</span>for vytux addon support please contact me via <a href="mailto:webtrees@vytux.com">webtrees [at] vytux.com</a></p>
+<p class="Body"><span style="font-weight: bold;">Forum:&nbsp;</span>general webtrees support can be found at the <a href="http://www.webtrees.net/index.php/en/forum/index-en">webtrees forum</a></p>
+<hr>
+<h3><strong>Copyright</strong></h3>
+<p class="Body">© 2013 Vytautas Krivickas and vytux.com</p>
 </body>
 </html>
