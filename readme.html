@@ -307,7 +307,8 @@ color : green;}
 </ol>
 <a name="upgrade"></a>
 <h2>Upgrade</h2>
-<p class="Body">Unfortunately even though this module is based on simpl_pages it cannot transfer the existing pages automatically. Therefore you will need to delete the old simpl_pages module and re-create the pages.</p>
+<p class="Body">Unfortunately even though this module is based on simpl_pages it cannot transfer the existing pages automatically. Therefore you will need to delete the old simpl_pages module and then either re-create the pages or run this sql script over your database <strong>after</strong> enabling the new module.</p>
+<p class="Code3" class="Monospace">UPDATE `wt_block` SET `module_name`='vytux_pages' WHERE `module_name`='simpl_pages'</p>
 <a name="Support"></a>
 <h2>Contact Support</h2>
 <p class="Body">You can contact our support staff by one of the following:</p>
