@@ -112,7 +112,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 				$menu->addSubmenu($submenu);
 			}
 		}
-		if (WT_USER_IS_ADMIN) {
+		if (\WT\Auth::isAdmin()) {
 			$submenu = new WT_Menu(WT_I18N::translate('Edit pages'), $this->getConfigLink(), 'menu-my_pages-edit');
 			$menu->addSubmenu($submenu);
 		}
