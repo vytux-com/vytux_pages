@@ -342,7 +342,11 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 				$items_content=WT_I18N::translate($items->pages_content);
 			}
 		}
-		$html.=$items_content;
+		if (isset($items_content)){
+			$html.=$items_content;
+		} else {
+			$html.=WT_I18N::translate('No content found for current access level and language');
+		}
 		$html.='</div>'; //close outer_pages_container
 		$html.='</div>'; //close pages_tabs
 		$html.='</div>'; //close pages-container
