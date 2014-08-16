@@ -22,6 +22,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
+use WT\Auth;
 
 if (!defined('WT_WEBTREES')) {
 	header('HTTP/1.0 403 Forbidden');
@@ -112,7 +113,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 				$menu->addSubmenu($submenu);
 			}
 		}
-		if (\WT\Auth::isAdmin()) {
+		if (Auth::isAdmin()) {
 			$submenu = new WT_Menu(WT_I18N::translate('Edit pages'), $this->getConfigLink(), 'menu-my_pages-edit');
 			$menu->addSubmenu($submenu);
 		}
