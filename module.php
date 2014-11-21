@@ -33,7 +33,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 
 	// Extend class WT_Module
 	public function getTitle() {
-		return WT_I18N::translate('Vytux_pages');
+		return WT_I18N::translate('Vytux Pages');
 	}
 
 	public function getMenuTitle() {
