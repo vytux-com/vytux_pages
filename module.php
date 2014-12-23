@@ -351,7 +351,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		$html.='</div>'; //close outer_pages_container
 		$html.='</div>'; //close pages_tabs
 		$html.='</div>'; //close pages-container
-		$html.='<script>document.onreadystatechange = function () {if (document.readyState == "complete") {$(".pages-accordion").accordion({heightStyle: "content"});}}</script>';
+		$html.='<script>document.onreadystatechange = function () {if (document.readyState == "complete") {$(".pages-accordion").accordion({heightStyle: "content", collapsible: true});}}</script>';
 		echo $html;
 	}
 
