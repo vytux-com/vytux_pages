@@ -18,11 +18,10 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
-// $Id
 */
 
 /* Main menu icon */
-li#menu-my_pages {background:url(pages.png) no-repeat 50% 50%}
+li#menu-my_pages {background:url(pages.png) no-repeat 50% 50% !important}
 li#menu-my_pages ul li {background:url(pages-small.png) no-repeat left 0}
 html[dir=rtl] li#menu-my_pages ul li {background-position:right 0}
 li#menu-my_pages ul li#menu-my_pages-edit {background:url(submenu_edit.png) no-repeat left 0}
@@ -36,5 +35,3 @@ html[dir='rtl'] #page-create {float:right;}
 
 /* Page styles */
 div#pages-container {margin:0 auto; overflow:hidden; padding:20px; width:95%;}
-
-#pages-container h2 {margin:14px 0;}
