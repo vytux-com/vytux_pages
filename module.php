@@ -332,7 +332,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access>=WT_USER_ACCESS_LEVEL) {
 				$html.='<li class="ui-state-default ui-corner-top'.($items_id==$items->block_id ? ' ui-tabs-selected ui-state-active' : '').'">'.
 					'<a href="module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pages_id='.$items->block_id.'">'.
-					'<span title="'.WT_I18N::translate($items->pages_title).'">'.WT_I18N::translate($items->pages_title).'</span></a></li>';
+					'<span title="'.str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))).'">'.str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))).'</span></a></li>';
 			}
 		}
 		$html.='</ul>';
@@ -340,7 +340,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		foreach ($items_list as $items) {
 			$languages=get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items_id==$items->block_id && $items->pages_access>=WT_USER_ACCESS_LEVEL) {
-				$items_content=WT_I18N::translate($items->pages_content);
+				$items_content=str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $items->pages_content)));
 			}
 		}
 		if (isset($items_content)){
@@ -428,9 +428,9 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 				// NOTE: Print the title text of the current item
 				echo '<tr><td colspan="5">';
 				echo '<div class="faq_edit_item">';
-				echo '<div class="faq_edit_title">', WT_I18N::translate($item->pages_title), '</div>';
+				echo '<div class="faq_edit_title">', str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_title))), '</div>';
 				// NOTE: Print the body text of the current item
-				echo '<div>', substr(WT_I18N::translate($item->pages_content), 0, 1)=='<' ? WT_I18N::translate($item->pages_content) : nl2br(WT_I18N::translate($item->pages_content)), '</div></div></td></tr>';
+				echo '<div>', substr(str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_content))), 0, 1)=='<' ? str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_content))) : nl2br(str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_content)))), '</div></div></td></tr>';
 			}
 			echo '</table>';
 		}
