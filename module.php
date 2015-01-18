@@ -23,6 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 use WT\Auth;
+use WT\Theme;
 
 if (!defined('WT_WEBTREES')) {
 	header('HTTP/1.0 403 Forbidden');
@@ -96,8 +97,8 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			return null;
 		}
 		
-		if (file_exists(WT_MODULES_DIR.$this->getName().'/'.WT_THEME_URL)) {
-			echo '<link rel="stylesheet" href="'.WT_MODULES_DIR.$this->getName().'/'.WT_THEME_URL.'style.css" type="text/css">';
+		if (file_exists(WT_MODULES_DIR.$this->getName().'/themes/'.Theme::theme()->themeId().'/')) {
+			echo '<link rel="stylesheet" href="'.WT_MODULES_DIR.$this->getName().'/themes/'.Theme::theme()->themeId().'/style.css" type="text/css">';
 		} else {
 			echo '<link rel="stylesheet" href="'.WT_MODULES_DIR.$this->getName().'/themes/webtrees/style.css" type="text/css">';
 		}

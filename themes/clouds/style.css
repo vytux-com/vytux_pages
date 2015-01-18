@@ -23,6 +23,7 @@
 /* Main menu icon */
 li#menu-my_pages {background:url(pages.png) no-repeat 50% 50%}
 li#menu-my_pages ul li {background:url(pages-small.png) no-repeat left 0}
+li#menu-my_pages ul li:first-child {background:none;}
 html[dir=rtl] li#menu-my_pages ul li {background-position:right 0}
 li#menu-my_pages ul li#menu-my_pages-edit {background:url(submenu_edit.png) no-repeat left 0}
 html[dir=rtl] #menu-my_pages ul li#menu-my_pages-edit {background-position:right 0}
