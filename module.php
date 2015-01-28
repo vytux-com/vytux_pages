@@ -145,6 +145,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 
 	// Action from the configuration page
 	private function edit() {
+
 		require_once WT_ROOT.'includes/functions/functions_edit.php';
 
 		if (WT_Filter::postBool('save') && WT_Filter::checkCsrf()) {
@@ -203,45 +204,141 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 				$gedcom_id=WT_GED_ID;
 			}
 			$controller->pageHeader();
+			
 			if (array_key_exists('ckeditor', WT_Module::getActiveModules())) {
 				ckeditor_WT_Module::enableEditor($controller);
 			}
+			?>
+			
+			<ol class="breadcrumb small">
+				<li><a href="admin.php"><?php echo WT_I18N::translate('Control panel'); ?></a></li>
+				<li><a href="admin_modules.php"><?php echo WT_I18N::translate('Module administration'); ?></a></li>
+				<li><a href="module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config"><?php echo WT_I18N::translate($this->getTitle()); ?></a></li>
+				<li class="active"><?php echo $controller->getPageTitle(); ?></li>
+			</ol>
 
-			echo '<form name="pages" method="post" action="#">';
-			echo WT_Filter::getCsrf();
-			echo '<input type="hidden" name="save" value="1">';
-			echo '<input type="hidden" name="block_id" value="', $block_id, '">';
-			echo '<table id="faq_module">';
-			echo '<tr><th>';
-			echo WT_I18N::translate('Title');
-			echo '</th></tr><tr><td><input type="text" name="pages_title" size="90" tabindex="1" value="'.htmlspecialchars($items_title).'"></td></tr>';
-			echo '<tr><th>';
-			echo WT_I18N::translate('Content');
-			echo '</th></tr><tr><td>';
-			echo '<textarea name="pages_content" class="html-edit" rows="10" cols="90" tabindex="2">', htmlspecialchars($items_content), '</textarea>';
-			echo '</td></tr>';
-			echo '<tr><th>', WT_I18N::translate('Access level');
-			echo '</th></tr><tr><td>', edit_field_access_level('pages_access', $items_access, 'tabindex="4"'), '</td></tr>';
-			echo '</table><table id="pages_module2">';
-			echo '<tr>';
-			echo '<th>', WT_I18N::translate('Show this pages for which languages?'), help_link('pages_language', $this->getName()), '</th>';
-			echo '<th>', WT_I18N::translate('Pages position'), help_link('pages_position', $this->getName()), '</th>';
-			echo '<th>', WT_I18N::translate('Pages visibility'), help_link('pages_visibility', $this->getName()), '</th>';
-			echo '</tr><tr>';
-			echo '<td>';
-			$languages=get_block_setting($block_id, 'languages');
-			echo edit_language_checkboxes('lang_', $languages);
-			echo '</td><td>';
-			echo '<input type="text" name="block_order" size="3" tabindex="5" value="', $block_order, '"></td>';
-			echo '</td><td>';
-			echo select_edit_control('gedcom_id', WT_Tree::getIdList(), WT_I18N::translate('All'), $gedcom_id, 'tabindex="4"');
-			echo '</td></tr>';
-			echo '</table>';
-
-			echo '<p><input type="submit" value="', WT_I18N::translate('Save'), '" tabindex="7">';
-			echo '&nbsp;<input type="button" value="', WT_I18N::translate('Cancel'), '" onclick="window.location=\''.$this->getConfigLink().'\';" tabindex="8"></p>';
-			echo '</form>';
-			exit;
+			<form class="form-horizontal" method="POST" action="#" name="pages" id="pagesForm">
+				<?php echo WT_Filter::getCsrf(); ?>
+				<input type="hidden" name="save" value="1">
+				<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
+				<h3><?php echo WT_I18N::translate('General'); ?></h3>
+				
+				<div class="form-group">
+					<label class="control-label col-sm-3" for="pages_title">
+						<?php echo WT_I18N::translate('Title'); ?>
+					</label>
+					<div class="col-sm-9">
+						<input
+							class="form-control"
+							id="pages_title"
+							size="90"
+							name="pages_title"
+							required
+							type="text"
+							value="<?php echo WT_Filter::escapeHtml($items_title); ?>"
+							>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3" for="pages_content">
+						<?php echo WT_I18N::translate('Content'); ?>
+					</label>
+					<div class="col-sm-9">
+						<textarea
+							class="form-control html-edit"
+							id="pages_content"
+							rows="10"
+							cols="90"
+							name="pages_content"
+							required
+							type="text">
+								<?php echo WT_Filter::escapeHtml($items_content); ?>
+						</textarea>
+					</div>
+				</div>
+				
+				<h3><?php echo WT_I18N::translate('Languages'); ?></h3>
+				
+				<div class="form-group">
+					<label class="control-label col-sm-3" for="lang_*">
+						<?php echo WT_I18N::translate('Show this page for which languages?'); ?>
+					</label>
+					<div class="row col-sm-9">
+						<?php 
+							$accepted_languages=explode(',', get_block_setting($block_id, 'languages'));
+							foreach (WT_I18N::installed_languages() as $locale => $language) {
+								$checked = in_array($locale, $accepted_languages) ? 'checked' : ''; 
+						?>
+								<div class="col-sm-3">
+									<label class="checkbox-inline "><input type="checkbox" name="lang_<?php echo $locale; ?>" <?php echo $checked; ?> ><?php echo $language; ?></label>
+								</div>
+						<?php 
+							}
+						?>
+					</div>
+				</div>
+				
+				<h3><?php echo WT_I18N::translate('Visibility and Access'); ?></h3>
+				
+				<div class="form-group">
+					<label class="control-label col-sm-3" for="block_order">
+						<?php echo WT_I18N::translate('Pages position'); ?>
+					</label>
+					<div class="col-sm-9">
+						<input
+							class="form-control"
+							id="position"
+							name="block_order"
+							size="3"
+							required
+							type="number"
+							value="<?php echo WT_Filter::escapeHtml($block_order); ?>"
+						>
+					</div>
+					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
+						<?php 
+							echo WT_I18N::translate('This field controls the order in which the pages are displayed.'),
+							'<br><br>',
+							WT_I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.'),
+							'<br><br>',
+							WT_I18N::translate('When more than one page has the same position number, only one of these pages will be visible.');
+						?>
+					</span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3" for="block_order">
+						<?php echo WT_I18N::translate('Pages visibility'); ?>
+					</label>
+					<div class="col-sm-9">
+						<?php echo select_edit_control('gedcom_id', WT_Tree::getIdList(), WT_I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
+					</div>
+					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
+						<?php 
+							echo WT_I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.');
+						?>
+					</span>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-3" for="pages_access">
+						<?php echo WT_I18N::translate('Access level'); ?>
+					</label>
+					<div class="col-sm-9">
+						<?php echo edit_field_access_level('pages_access', $items_access, 'class="form-control"'); ?>
+					</div>
+				</div>
+				
+				<div class="row col-sm-9 col-sm-offset-3">
+					<button class="btn btn-primary" type="submit">
+						<i class="fa fa-check"></i>
+						<?php echo WT_I18N::translate('save'); ?>
+					</button>
+					<button class="btn" type="button" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
+						<i class="fa fa-close"></i>
+						<?php echo WT_I18N::translate('cancel'); ?>
+					</button>
+				</div>
+			</form>
+<?php
 		}
 	}
 
