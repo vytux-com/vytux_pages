@@ -25,11 +25,6 @@
 use WT\Auth;
 use WT\Theme;
 
-if (!defined('WT_WEBTREES')) {
-	header('HTTP/1.0 403 Forbidden');
-	exit;
-}
-
 class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Module_Block, WT_Module_Config {
 
 	// Extend class WT_Module
@@ -138,11 +133,11 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			$this->edit();
 			break;
 		case 'admin_movedown':
-			$this->movedown();
+			$this->moveDown();
 			$this->config();
 			break;
 		case 'admin_moveup':
-			$this->moveup();
+			$this->moveUp();
 			$this->config();
 			break;
 		}
@@ -150,7 +145,6 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 
 	// Action from the configuration page
 	private function edit() {
-
 		require_once WT_ROOT.'includes/functions/functions_edit.php';
 
 		if (WT_Filter::postBool('save') && WT_Filter::checkCsrf()) {
@@ -263,7 +257,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		)->execute(array($block_id));
 	}
 
-	private function moveup() {
+	private function moveUp() {
 		$block_id=WT_Filter::get('block_id');
 
 		$block_order=WT_DB::prepare(
@@ -288,7 +282,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		}
 	}
 
-	private function movedown() {
+	private function moveDown() {
 		$block_id=WT_Filter::get('block_id');
 
 		$block_order=WT_DB::prepare(
@@ -382,59 +376,105 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		$max_block_order=WT_DB::prepare(
 			"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
 		)->execute(array($this->getName()))->fetchOne();
-
-		echo
-			'<p><form method="get" action="', WT_SCRIPT_NAME ,'">',
-			WT_I18N::translate('Family tree'), ' ',
-			'<input type="hidden" name="mod", value="', $this->getName(), '">',
-			'<input type="hidden" name="mod_action", value="admin_config">',
-			select_edit_control('ged', WT_Tree::getNameList(), null, WT_GEDCOM),
-			'<input type="submit" value="', WT_I18N::translate('show'), '">',
-			'</form></p>';
-
-		echo '<a href="module.php?mod=', $this->getName(), '&amp;mod_action=admin_edit">', WT_I18N::translate('Add page'), '</a>';
-		echo '<table id="faq_edit">';
-		if (empty($items)) {
-			echo '<tr><td class="error center" colspan="5">', WT_I18N::translate('No pages have been created.'), '</td></tr></table>';
-		} else {
-			$trees=WT_Tree::getAll();
-			foreach ($items as $item) {
-				// NOTE: Print the position of the current item
-				echo '<tr class="faq_edit_pos"><td>';
-				echo WT_I18N::translate('Position item'), ': ', $item->block_order, ', ';
-				if ($item->gedcom_id==null) {
-					echo WT_I18N::translate('All');
-				} else {
-					echo $trees[$item->gedcom_id]->tree_title_html;
-				}
-				echo '</td>';
-				// NOTE: Print the edit options of the current item
-				echo '<td>';
-				if ($item->block_order==$min_block_order) {
-					echo '&nbsp;';
-				} else {
-					echo '<a href="module.php?mod=', $this->getName(), '&amp;mod_action=admin_moveup&amp;block_id=', $item->block_id, ' "class="icon-uarrow"></a>';
-				}
-				echo '</td><td>';
-				if ($item->block_order==$max_block_order) {
-					echo '&nbsp;';
-				} else {
-					echo '<a href="module.php?mod=', $this->getName(), '&amp;mod_action=admin_movedown&amp;block_id=', $item->block_id, ' "class="icon-darrow"></a>';
-				}
-				echo '</td><td>';
-				echo '<a href="module.php?mod=', $this->getName(), '&amp;mod_action=admin_edit&amp;block_id=', $item->block_id, '">', WT_I18N::translate('Edit'), '</a>';
-				echo '</td><td>';
-				echo '<a href="module.php?mod=', $this->getName(), '&amp;mod_action=admin_delete&amp;block_id=', $item->block_id, '" onclick="return confirm(\'', WT_I18N::translate('Are you sure you want to delete this pages?'), '\');">', WT_I18N::translate('Delete'), '</a>';
-				echo '</td></tr>';
-				// NOTE: Print the title text of the current item
-				echo '<tr><td colspan="5">';
-				echo '<div class="faq_edit_item">';
-				echo '<div class="faq_edit_title">', str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_title))), '</div>';
-				// NOTE: Print the body text of the current item
-				echo '<div>', substr(str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_content))), 0, 1)=='<' ? str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_content))) : nl2br(str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $item->pages_content)))), '</div></div></td></tr>';
-			}
-			echo '</table>';
-		}
+		?>
+		
+		<ol class="breadcrumb small">
+			<li><a href="admin.php"><?php echo WT_I18N::translate('Control panel'); ?></a></li>
+			<li><a href="admin_modules.php"><?php echo WT_I18N::translate('Module administration'); ?></a></li>
+			<li class="active"><?php echo $controller->getPageTitle(); ?></li>
+		</ol>
+		
+		<div class="row">
+			<div class="col-sm-4">
+				<form class="form form-inline">
+					<label for="ged" class="sr-only">
+						<?php echo WT_I18N::translate('Family tree'); ?>
+					</label>
+					<input type="hidden" name="mod" value="<?php echo  $this->getName(); ?>">
+					<input type="hidden" name="mod_action" value="admin_config">
+					<?php echo select_edit_control('ged', WT_Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
+					<input type="submit" class="btn btn-primary" value="<?php echo WT_I18N::translate('show'); ?>">
+				</form>
+			</div>
+			<div class="col-sm-4 text-center">
+				<p>
+					<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit" class="btn btn-primary">
+						<i class="fa fa-plus"></i>
+						<?php echo WT_I18N::translate('Add page'); ?>
+					</a>
+				</p>
+			</div>
+			<div class="col-sm-4 text-right">		
+				<?php // TODO: Move to internal item/page
+				if (file_exists(WT_MODULES_DIR.$this->getName().'/readme.html')) { ?>
+					<a href="<?php echo WT_MODULES_DIR.$this->getName(); ?>/readme.html" class="btn btn-info">
+						<i class="fa fa-newspaper-o"></i>
+						<?php echo WT_I18N::translate('ReadMe'); ?>
+					</a>
+				<?php } ?>
+			</div>
+		</div>
+		
+		<table class="table table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th class="col-sm-2"><?php echo WT_I18N::translate('Position'); ?></th>
+					<th class="col-sm-3"><?php echo WT_I18N::translate('Title'); ?></th>
+					<th class="col-sm-1" colspan=4><?php echo WT_I18N::translate('Controls'); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($items as $item): ?>
+				<tr>
+					<td>
+						<?php echo $item->block_order, ', ';
+						if ($item->gedcom_id==null) {
+							echo WT_I18N::translate('All');
+						} else {
+							echo WT_Filter::escapeHtml(WT_Tree::get($item->gedcom_id)->tree_title);
+						} ?>
+					</td>
+					<td>
+						<?php echo WT_Filter::escapeHtml(WT_I18N::translate($item->pages_title)); ?>
+					</td>
+					<td class="text-center">
+						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>">
+							<div class="icon-edit">&nbsp;</div>
+						</a>
+					</td>
+					<td class="text-center">
+						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_moveup&amp;block_id=<?php echo $item->block_id; ?>">
+							<?php
+								if ($item->block_order==$min_block_order) {
+									echo '&nbsp;';
+								} else {
+									echo '<div class="icon-uarrow">&nbsp;</div>';
+								} 
+							?>
+						</a>
+					</td>
+					<td class="text-center">
+						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_movedown&amp;block_id=<?php echo $item->block_id; ?>">
+							<?php
+								if ($item->block_order==$max_block_order) {
+									echo '&nbsp;';
+								} else {
+									echo '<div class="icon-darrow">&nbsp;</div>';
+								} 
+							?>
+						</a>
+					</td>
+					<td class="text-center">
+						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>"
+							onclick="return confirm('<?php echo WT_I18N::translate('Are you sure you want to delete this page?'); ?>');">
+							<div class="icon-delete">&nbsp;</div>
+						</a>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+<?php
 	}
 
 	// Return the list of pages
