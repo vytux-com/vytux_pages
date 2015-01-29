@@ -140,6 +140,8 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			$this->moveUp();
 			$this->config();
 			break;
+		default:
+			http_response_code(404);
 		}
 	}
 
