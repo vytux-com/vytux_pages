@@ -530,7 +530,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 						if ($item->gedcom_id==null) {
 							echo WT_I18N::translate('All');
 						} else {
-							echo WT_Filter::escapeHtml(WT_Tree::get($item->gedcom_id)->tree_title);
+							echo WT_Tree::get($item->gedcom_id)->titleHtml();
 						} ?>
 					</td>
 					<td>
