@@ -1,4 +1,6 @@
 <?php
+namespace Webtrees;
+
 // webtrees - vytux_pages module based on simpl_pages
 //
 // Copyright (C) 2013 Vytautas Krivickas and vytux.com. All rights reserved.
@@ -22,23 +24,21 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
-use WT\Auth;
-use WT\Theme;
 
-class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Module_Block, WT_Module_Config {
+class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, ModuleConfigInterface, ModuleMenuInterface {
 
 	// Extend class WT_Module
 	public function getTitle() {
-		return WT_I18N::translate('Vytux Pages');
+		return I18N::translate('Vytux Pages');
 	}
 
 	public function getMenuTitle() {
-		return WT_I18N::translate('Resources');
+		return I18N::translate('Resources');
 	}
 
 	// Extend class WT_Module
 	public function getDescription() {
-		return WT_I18N::translate('Display resource pages.');
+		return I18N::translate('Display resource pages.');
 	}
 
 	// Implement WT_Module_Menu
@@ -83,8 +83,8 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 	public function getMenu() {
 		global $controller, $SEARCH_SPIDER;
 		
-		$block_id=WT_Filter::get('block_id');
-		$default_block=WT_DB::prepare(
+		$block_id=Filter::get('block_id');
+		$default_block=Database::prepare(
 			"SELECT block_id FROM `##block` WHERE block_order=? AND module_name=?"
 		)->execute(array(0, $this->getName()))->fetchOne();
 
@@ -99,18 +99,18 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		}
 		
 		//-- main PAGES menu item
-		$menu = new WT_Menu($this->getMenuTitle(), 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pages_id='.$default_block, 'menu-my_pages', 'down');
+		$menu = new Menu($this->getMenuTitle(), 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pages_id='.$default_block, 'menu-my_pages', 'down');
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 		foreach ($this->getMenupagesList() as $items) {
 			$languages=get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access>=WT_USER_ACCESS_LEVEL) {
 				$path = 'module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pages_id='.$items->block_id;
-				$submenu = new WT_Menu(WT_I18N::translate($items->pages_title), $path, 'menu-my_pages-'.$items->block_id);
+				$submenu = new Menu(I18N::translate($items->pages_title), $path, 'menu-my_pages-'.$items->block_id);
 				$menu->addSubmenu($submenu);
 			}
 		}
 		if (Auth::isAdmin()) {
-			$submenu = new WT_Menu(WT_I18N::translate('Edit pages'), $this->getConfigLink(), 'menu-my_pages-edit');
+			$submenu = new Menu(I18N::translate('Edit pages'), $this->getConfigLink(), 'menu-my_pages-edit');
 			$menu->addSubmenu($submenu);
 		}
 		return $menu;
@@ -150,57 +150,57 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 
 		require_once WT_ROOT.'includes/functions/functions_edit.php';
 
-		if (WT_Filter::postBool('save') && WT_Filter::checkCsrf()) {
-			$block_id=WT_Filter::post('block_id');
+		if (Filter::postBool('save') && Filter::checkCsrf()) {
+			$block_id=Filter::post('block_id');
 			if ($block_id) {
-				WT_DB::prepare(
+				Database::prepare(
 					"UPDATE `##block` SET gedcom_id=NULLIF(?, ''), block_order=? WHERE block_id=?"
 				)->execute(array(
-					WT_Filter::post('gedcom_id'),
-					(int)WT_Filter::post('block_order'),
+					Filter::post('gedcom_id'),
+					(int)Filter::post('block_order'),
 					$block_id
 				));
 			} else {
-				WT_DB::prepare(
+				Database::prepare(
 					"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
 				)->execute(array(
-					WT_Filter::post('gedcom_id'),
+					Filter::post('gedcom_id'),
 					$this->getName(),
-					(int)WT_Filter::post('block_order')
+					(int)Filter::post('block_order')
 				));
-				$block_id=WT_DB::getInstance()->lastInsertId();
+				$block_id=Database::getInstance()->lastInsertId();
 			}
-			set_block_setting($block_id, 'pages_title', WT_Filter::post('pages_title'));
-			set_block_setting($block_id, 'pages_content', WT_Filter::post('pages_content')); // allow html
-			set_block_setting($block_id, 'pages_access', WT_Filter::post('pages_access'));
+			set_block_setting($block_id, 'pages_title', Filter::post('pages_title'));
+			set_block_setting($block_id, 'pages_content', Filter::post('pages_content')); // allow html
+			set_block_setting($block_id, 'pages_access', Filter::post('pages_access'));
 			$languages=array();
-			foreach (WT_I18N::installed_languages() as $code=>$name) {
-				if (WT_Filter::postBool('lang_'.$code)) {
+			foreach (I18N::installed_languages() as $code=>$name) {
+				if (Filter::postBool('lang_'.$code)) {
 					$languages[]=$code;
 				}
 			}
 			set_block_setting($block_id, 'languages', implode(',', $languages));
 			$this->config();
 		} else {
-			$block_id=WT_Filter::get('block_id');
-			$controller=new WT_Controller_Page();
+			$block_id=Filter::get('block_id');
+			$controller=new PageController();
 			if ($block_id) {
-				$controller->setPageTitle(WT_I18N::translate('Edit pages'));
+				$controller->setPageTitle(I18N::translate('Edit pages'));
 				$items_title=get_block_setting($block_id, 'pages_title');
 				$items_content=get_block_setting($block_id, 'pages_content');
 				$items_access=get_block_setting($block_id, 'pages_access');
-				$block_order=WT_DB::prepare(
+				$block_order=Database::prepare(
 					"SELECT block_order FROM `##block` WHERE block_id=?"
 				)->execute(array($block_id))->fetchOne();
-				$gedcom_id=WT_DB::prepare(
+				$gedcom_id=Database::prepare(
 					"SELECT gedcom_id FROM `##block` WHERE block_id=?"
 				)->execute(array($block_id))->fetchOne();
 			} else {
-				$controller->setPageTitle(WT_I18N::translate('Add pages'));
+				$controller->setPageTitle(I18N::translate('Add pages'));
 				$items_title='';
 				$items_content='';
 				$items_access=1;
-				$block_order=WT_DB::prepare(
+				$block_order=Database::prepare(
 					"SELECT IFNULL(MAX(block_order)+1, 0) FROM `##block` WHERE module_name=?"
 				)->execute(array($this->getName()))->fetchOne();
 				$gedcom_id=WT_GED_ID;
@@ -213,21 +213,21 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			?>
 			
 			<ol class="breadcrumb small">
-				<li><a href="admin.php"><?php echo WT_I18N::translate('Control panel'); ?></a></li>
-				<li><a href="admin_modules.php"><?php echo WT_I18N::translate('Module administration'); ?></a></li>
-				<li><a href="module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config"><?php echo WT_I18N::translate($this->getTitle()); ?></a></li>
+				<li><a href="admin.php"><?php echo I18N::translate('Control panel'); ?></a></li>
+				<li><a href="admin_modules.php"><?php echo I18N::translate('Module administration'); ?></a></li>
+				<li><a href="module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config"><?php echo I18N::translate($this->getTitle()); ?></a></li>
 				<li class="active"><?php echo $controller->getPageTitle(); ?></li>
 			</ol>
 
 			<form class="form-horizontal" method="POST" action="#" name="pages" id="pagesForm">
-				<?php echo WT_Filter::getCsrf(); ?>
+				<?php echo Filter::getCsrf(); ?>
 				<input type="hidden" name="save" value="1">
 				<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
-				<h3><?php echo WT_I18N::translate('General'); ?></h3>
+				<h3><?php echo I18N::translate('General'); ?></h3>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="pages_title">
-						<?php echo WT_I18N::translate('Title'); ?>
+						<?php echo I18N::translate('Title'); ?>
 					</label>
 					<div class="col-sm-9">
 						<input
@@ -237,13 +237,13 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 							name="pages_title"
 							required
 							type="text"
-							value="<?php echo WT_Filter::escapeHtml($items_title); ?>"
+							value="<?php echo Filter::escapeHtml($items_title); ?>"
 							>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="pages_content">
-						<?php echo WT_I18N::translate('Content'); ?>
+						<?php echo I18N::translate('Content'); ?>
 					</label>
 					<div class="col-sm-9">
 						<textarea
@@ -254,21 +254,21 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 							name="pages_content"
 							required
 							type="text">
-								<?php echo WT_Filter::escapeHtml($items_content); ?>
+								<?php echo Filter::escapeHtml($items_content); ?>
 						</textarea>
 					</div>
 				</div>
 				
-				<h3><?php echo WT_I18N::translate('Languages'); ?></h3>
+				<h3><?php echo I18N::translate('Languages'); ?></h3>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="lang_*">
-						<?php echo WT_I18N::translate('Show this page for which languages?'); ?>
+						<?php echo I18N::translate('Show this page for which languages?'); ?>
 					</label>
 					<div class="row col-sm-9">
 						<?php 
 							$accepted_languages=explode(',', get_block_setting($block_id, 'languages'));
-							foreach (WT_I18N::installed_languages() as $locale => $language) {
+							foreach (I18N::installed_languages() as $locale => $language) {
 								$checked = in_array($locale, $accepted_languages) ? 'checked' : ''; 
 						?>
 								<div class="col-sm-3">
@@ -280,11 +280,11 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 					</div>
 				</div>
 				
-				<h3><?php echo WT_I18N::translate('Visibility and Access'); ?></h3>
+				<h3><?php echo I18N::translate('Visibility and Access'); ?></h3>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="block_order">
-						<?php echo WT_I18N::translate('Pages position'); ?>
+						<?php echo I18N::translate('Pages position'); ?>
 					</label>
 					<div class="col-sm-9">
 						<input
@@ -294,35 +294,35 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 							size="3"
 							required
 							type="number"
-							value="<?php echo WT_Filter::escapeHtml($block_order); ?>"
+							value="<?php echo Filter::escapeHtml($block_order); ?>"
 						>
 					</div>
 					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
 						<?php 
-							echo WT_I18N::translate('This field controls the order in which the pages are displayed.'),
+							echo I18N::translate('This field controls the order in which the pages are displayed.'),
 							'<br><br>',
-							WT_I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.'),
+							I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.'),
 							'<br><br>',
-							WT_I18N::translate('When more than one page has the same position number, only one of these pages will be visible.');
+							I18N::translate('When more than one page has the same position number, only one of these pages will be visible.');
 						?>
 					</span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="block_order">
-						<?php echo WT_I18N::translate('Pages visibility'); ?>
+						<?php echo I18N::translate('Pages visibility'); ?>
 					</label>
 					<div class="col-sm-9">
-						<?php echo select_edit_control('gedcom_id', WT_Tree::getIdList(), WT_I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
+						<?php echo select_edit_control('gedcom_id', WT_Tree::getIdList(), I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
 					</div>
 					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
 						<?php 
-							echo WT_I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.');
+							echo I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.');
 						?>
 					</span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="pages_access">
-						<?php echo WT_I18N::translate('Access level'); ?>
+						<?php echo I18N::translate('Access level'); ?>
 					</label>
 					<div class="col-sm-9">
 						<?php echo edit_field_access_level('pages_access', $items_access, 'class="form-control"'); ?>
@@ -332,11 +332,11 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 				<div class="row col-sm-9 col-sm-offset-3">
 					<button class="btn btn-primary" type="submit">
 						<i class="fa fa-check"></i>
-						<?php echo WT_I18N::translate('save'); ?>
+						<?php echo I18N::translate('save'); ?>
 					</button>
 					<button class="btn" type="button" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
 						<i class="fa fa-close"></i>
-						<?php echo WT_I18N::translate('cancel'); ?>
+						<?php echo I18N::translate('cancel'); ?>
 					</button>
 				</div>
 			</form>
@@ -345,25 +345,25 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 	}
 
 	private function delete() {
-		$block_id=WT_Filter::get('block_id');
+		$block_id=Filter::get('block_id');
 
-		WT_DB::prepare(
+		Database::prepare(
 			"DELETE FROM `##block_setting` WHERE block_id=?"
 		)->execute(array($block_id));
 
-		WT_DB::prepare(
+		Database::prepare(
 			"DELETE FROM `##block` WHERE block_id=?"
 		)->execute(array($block_id));
 	}
 
 	private function moveUp() {
-		$block_id=WT_Filter::get('block_id');
+		$block_id=Filter::get('block_id');
 
-		$block_order=WT_DB::prepare(
+		$block_order=Database::prepare(
 			"SELECT block_order FROM `##block` WHERE block_id=?"
 		)->execute(array($block_id))->fetchOne();
 
-		$swap_block=WT_DB::prepare(
+		$swap_block=Database::prepare(
 			"SELECT block_order, block_id".
 			" FROM `##block`".
 			" WHERE block_order=(".
@@ -372,23 +372,23 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			" LIMIT 1"
 		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
 		if ($swap_block) {
-			WT_DB::prepare(
+			Database::prepare(
 				"UPDATE `##block` SET block_order=? WHERE block_id=?"
 			)->execute(array($swap_block->block_order, $block_id));
-			WT_DB::prepare(
+			Database::prepare(
 				"UPDATE `##block` SET block_order=? WHERE block_id=?"
 			)->execute(array($block_order, $swap_block->block_id));
 		}
 	}
 
 	private function moveDown() {
-		$block_id=WT_Filter::get('block_id');
+		$block_id=Filter::get('block_id');
 
-		$block_order=WT_DB::prepare(
+		$block_order=Database::prepare(
 			"SELECT block_order FROM `##block` WHERE block_id=?"
 		)->execute(array($block_id))->fetchOne();
 
-		$swap_block=WT_DB::prepare(
+		$swap_block=Database::prepare(
 			"SELECT block_order, block_id".
 			" FROM `##block`".
 			" WHERE block_order=(".
@@ -397,10 +397,10 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			" LIMIT 1"
 		)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
 		if ($swap_block) {
-			WT_DB::prepare(
+			Database::prepare(
 				"UPDATE `##block` SET block_order=? WHERE block_id=?"
 			)->execute(array($swap_block->block_order, $block_id));
-			WT_DB::prepare(
+			Database::prepare(
 				"UPDATE `##block` SET block_order=? WHERE block_id=?"
 			)->execute(array($block_order, $swap_block->block_id));
 		}
@@ -409,9 +409,9 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 	private function show() {
 		global $controller;
 		$items_header_description = '';//Add your own header here.
-		$items_id=WT_Filter::get('pages_id');
-		$controller=new WT_Controller_Page();
-		$controller->setPageTitle(WT_I18N::translate('Resource pages'))//Edit this line for a different summary page title
+		$items_id=Filter::get('pages_id');
+		$controller=new PageController();
+		$controller->setPageTitle(I18N::translate('Resource pages'))//Edit this line for a different summary page title
 			->pageHeader();
 		// HTML common to all pages
 		$html='<div id="pages-container">'.
@@ -426,7 +426,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access>=WT_USER_ACCESS_LEVEL) {
 				$html.='<li class="ui-state-default ui-corner-top'.($items_id==$items->block_id ? ' ui-tabs-selected ui-state-active' : '').'">'.
 					'<a href="module.php?mod='.$this->getName().'&amp;mod_action=show&amp;pages_id='.$items->block_id.'">'.
-					'<span title="'.str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))).'">'.str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))).'</span></a></li>';
+					'<span title="'.str_replace("{@PERC@}", "%", I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))).'">'.str_replace("{@PERC@}", "%", I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))).'</span></a></li>';
 			}
 		}
 		$html.='</ul>';
@@ -434,13 +434,13 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		foreach ($items_list as $items) {
 			$languages=get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items_id==$items->block_id && $items->pages_access>=WT_USER_ACCESS_LEVEL) {
-				$items_content=str_replace("{@PERC@}", "%", WT_I18N::translate(str_replace("%", "{@PERC@}", $items->pages_content)));
+				$items_content=str_replace("{@PERC@}", "%", I18N::translate(str_replace("%", "{@PERC@}", $items->pages_content)));
 			}
 		}
 		if (isset($items_content)){
 			$html.=$items_content;
 		} else {
-			$html.=WT_I18N::translate('No content found for current access level and language');
+			$html.=I18N::translate('No content found for current access level and language');
 		}
 		$html.='</div>'; //close outer_pages_container
 		$html.='</div>'; //close pages_tabs
@@ -452,11 +452,11 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 	private function config() {
 		require_once 'includes/functions/functions_edit.php';
 
-		$controller=new WT_Controller_Page();
+		$controller=new PageController();
 		$controller->setPageTitle($this->getTitle());
 		$controller->pageHeader();
 
-		$items=WT_DB::prepare(
+		$items=Database::prepare(
 			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content".
 			" FROM `##block` b".
 			" JOIN `##block_setting` bs1 USING (block_id)".
@@ -468,18 +468,18 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			" ORDER BY block_order"
 		)->execute(array($this->getName(), WT_GED_ID, WT_GED_ID))->fetchAll();
 
-		$min_block_order=WT_DB::prepare(
+		$min_block_order=Database::prepare(
 			"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
 		)->execute(array($this->getName()))->fetchOne();
 
-		$max_block_order=WT_DB::prepare(
+		$max_block_order=Database::prepare(
 			"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
 		)->execute(array($this->getName()))->fetchOne();
 		?>
 		
 		<ol class="breadcrumb small">
-			<li><a href="admin.php"><?php echo WT_I18N::translate('Control panel'); ?></a></li>
-			<li><a href="admin_modules.php"><?php echo WT_I18N::translate('Module administration'); ?></a></li>
+			<li><a href="admin.php"><?php echo I18N::translate('Control panel'); ?></a></li>
+			<li><a href="admin_modules.php"><?php echo I18N::translate('Module administration'); ?></a></li>
 			<li class="active"><?php echo $controller->getPageTitle(); ?></li>
 		</ol>
 		
@@ -487,19 +487,19 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 			<div class="col-sm-4">
 				<form class="form form-inline">
 					<label for="ged" class="sr-only">
-						<?php echo WT_I18N::translate('Family tree'); ?>
+						<?php echo I18N::translate('Family tree'); ?>
 					</label>
 					<input type="hidden" name="mod" value="<?php echo  $this->getName(); ?>">
 					<input type="hidden" name="mod_action" value="admin_config">
 					<?php echo select_edit_control('ged', WT_Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
-					<input type="submit" class="btn btn-primary" value="<?php echo WT_I18N::translate('show'); ?>">
+					<input type="submit" class="btn btn-primary" value="<?php echo I18N::translate('show'); ?>">
 				</form>
 			</div>
 			<div class="col-sm-4 text-center">
 				<p>
 					<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit" class="btn btn-primary">
 						<i class="fa fa-plus"></i>
-						<?php echo WT_I18N::translate('Add page'); ?>
+						<?php echo I18N::translate('Add page'); ?>
 					</a>
 				</p>
 			</div>
@@ -508,7 +508,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 				if (file_exists(WT_MODULES_DIR.$this->getName().'/readme.html')) { ?>
 					<a href="<?php echo WT_MODULES_DIR.$this->getName(); ?>/readme.html" class="btn btn-info">
 						<i class="fa fa-newspaper-o"></i>
-						<?php echo WT_I18N::translate('ReadMe'); ?>
+						<?php echo I18N::translate('ReadMe'); ?>
 					</a>
 				<?php } ?>
 			</div>
@@ -517,9 +517,9 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 		<table class="table table-bordered table-condensed">
 			<thead>
 				<tr>
-					<th class="col-sm-2"><?php echo WT_I18N::translate('Position'); ?></th>
-					<th class="col-sm-3"><?php echo WT_I18N::translate('Title'); ?></th>
-					<th class="col-sm-1" colspan=4><?php echo WT_I18N::translate('Controls'); ?></th>
+					<th class="col-sm-2"><?php echo I18N::translate('Position'); ?></th>
+					<th class="col-sm-3"><?php echo I18N::translate('Title'); ?></th>
+					<th class="col-sm-1" colspan=4><?php echo I18N::translate('Controls'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -528,13 +528,13 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 					<td>
 						<?php echo $item->block_order, ', ';
 						if ($item->gedcom_id==null) {
-							echo WT_I18N::translate('All');
+							echo I18N::translate('All');
 						} else {
 							echo WT_Tree::get($item->gedcom_id)->titleHtml();
 						} ?>
 					</td>
 					<td>
-						<?php echo WT_Filter::escapeHtml(WT_I18N::translate($item->pages_title)); ?>
+						<?php echo Filter::escapeHtml(I18N::translate($item->pages_title)); ?>
 					</td>
 					<td class="text-center">
 						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>">
@@ -565,7 +565,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 					</td>
 					<td class="text-center">
 						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>"
-							onclick="return confirm('<?php echo WT_I18N::translate('Are you sure you want to delete this page?'); ?>');">
+							onclick="return confirm('<?php echo I18N::translate('Are you sure you want to delete this page?'); ?>');">
 							<div class="icon-delete">&nbsp;</div>
 						</a>
 					</td>
@@ -578,7 +578,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 
 	// Return the list of pages
 	private function getPagesList() {
-		return WT_DB::prepare(
+		return Database::prepare(
 			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access, bs3.setting_value AS pages_content".
 			" FROM `##block` b".
 			" JOIN `##block_setting` bs1 USING (block_id)".
@@ -595,7 +595,7 @@ class vytux_pages_WT_Module extends WT_Module implements WT_Module_Menu, WT_Modu
 	
 	// Return the list of pages for menu
 	private function getMenupagesList() {
-		return WT_DB::prepare(
+		return Database::prepare(
 			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access".
 			" FROM `##block` b".
 			" JOIN `##block_setting` bs1 USING (block_id)".
