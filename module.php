@@ -147,9 +147,6 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 
 	// Action from the configuration page
 	private function edit() {
-
-		require_once WT_ROOT.'includes/functions/functions_edit.php';
-
 		if (Filter::postBool('save') && Filter::checkCsrf()) {
 			$block_id=Filter::post('block_id');
 			if ($block_id) {
@@ -450,8 +447,6 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 	}
 
 	private function config() {
-		require_once 'includes/functions/functions_edit.php';
-
 		$controller=new PageController();
 		$controller->setPageTitle($this->getTitle());
 		$controller->pageHeader();
