@@ -312,7 +312,7 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 						<?php echo I18N::translate('Pages visibility'); ?>
 					</label>
 					<div class="col-sm-9">
-						<?php echo select_edit_control('gedcom_id', WT_Tree::getIdList(), I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
+						<?php echo select_edit_control('gedcom_id', Tree::getIdList(), I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
 					</div>
 					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
 						<?php 
@@ -491,7 +491,7 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 					</label>
 					<input type="hidden" name="mod" value="<?php echo  $this->getName(); ?>">
 					<input type="hidden" name="mod_action" value="admin_config">
-					<?php echo select_edit_control('ged', WT_Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
+					<?php echo select_edit_control('ged', Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
 					<input type="submit" class="btn btn-primary" value="<?php echo I18N::translate('show'); ?>">
 				</form>
 			</div>
@@ -530,7 +530,7 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 						if ($item->gedcom_id==null) {
 							echo I18N::translate('All');
 						} else {
-							echo WT_Tree::get($item->gedcom_id)->titleHtml();
+							echo Tree::get($item->gedcom_id)->titleHtml();
 						} ?>
 					</td>
 					<td>
