@@ -1,5 +1,5 @@
 <?php
-namespace Webtrees;
+namespace Fisharebest\Webtrees;
 
 // webtrees - vytux_pages module based on simpl_pages
 //
