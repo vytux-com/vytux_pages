@@ -471,6 +471,89 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 			"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
 		)->execute(array($this->getName()))->fetchOne();
 		?>
+		<style>
+			.text-left-not-xs, .text-left-not-sm, .text-left-not-md, .text-left-not-lg {
+				text-align: left;
+			}
+			.text-center-not-xs, .text-center-not-sm, .text-center-not-md, .text-center-not-lg {
+				text-align: center;
+			}
+			.text-right-not-xs, .text-right-not-sm, .text-right-not-md, .text-right-not-lg {
+				text-align: right;
+			}
+			.text-justify-not-xs, .text-justify-not-sm, .text-justify-not-md, .text-justify-not-lg {
+				text-align: justify;
+			}
+
+			@media (max-width: 767px) {
+				.text-left-not-xs, .text-center-not-xs, .text-right-not-xs, .text-justify-not-xs {
+					text-align: inherit;
+				}
+				.text-left-xs {
+					text-align: left;
+				}
+				.text-center-xs {
+					text-align: center;
+				}
+				.text-right-xs {
+					text-align: right;
+				}
+				.text-justify-xs {
+					text-align: justify;
+				}
+			}
+			@media (min-width: 768px) and (max-width: 991px) {
+				.text-left-not-sm, .text-center-not-sm, .text-right-not-sm, .text-justify-not-sm {
+					text-align: inherit;
+				}
+				.text-left-sm {
+					text-align: left;
+				}
+				.text-center-sm {
+					text-align: center;
+				}
+				.text-right-sm {
+					text-align: right;
+				}
+				.text-justify-sm {
+					text-align: justify;
+				}
+			}
+			@media (min-width: 992px) and (max-width: 1199px) {
+				.text-left-not-md, .text-center-not-md, .text-right-not-md, .text-justify-not-md {
+					text-align: inherit;
+				}
+				.text-left-md {
+					text-align: left;
+				}
+				.text-center-md {
+					text-align: center;
+				}
+				.text-right-md {
+					text-align: right;
+				}
+				.text-justify-md {
+					text-align: justify;
+				}
+			}
+			@media (min-width: 1200px) {
+				.text-left-not-lg, .text-center-not-lg, .text-right-not-lg, .text-justify-not-lg {
+					text-align: inherit;
+				}
+				.text-left-lg {
+					text-align: left;
+				}
+				.text-center-lg {
+					text-align: center;
+				}
+				.text-right-lg {
+					text-align: right;
+				}
+				.text-justify-lg {
+					text-align: justify;
+				}
+			}
+		</style>
 		
 		<ol class="breadcrumb small">
 			<li><a href="admin.php"><?php echo I18N::translate('Control panel'); ?></a></li>
@@ -479,18 +562,23 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 		</ol>
 		
 		<div class="row">
-			<div class="col-sm-4">
-				<form class="form form-inline">
+			<div class="col-sm-4 col-xs-12">
+				<form class="form">
 					<label for="ged" class="sr-only">
 						<?php echo I18N::translate('Family tree'); ?>
 					</label>
 					<input type="hidden" name="mod" value="<?php echo  $this->getName(); ?>">
 					<input type="hidden" name="mod_action" value="admin_config">
-					<?php echo select_edit_control('ged', Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
-					<input type="submit" class="btn btn-primary" value="<?php echo I18N::translate('show'); ?>">
+					<div class="col-sm-9 col-xs-9" style="padding:0;">
+						<?php echo select_edit_control('ged', Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
+					</div>
+					<div class="col-sm-3" style="padding:0;">
+						<input type="submit" class="btn btn-primary" value="<?php echo I18N::translate('show'); ?>">
+					</div>
 				</form>
 			</div>
-			<div class="col-sm-4 text-center">
+			<span class="visible-xs hidden-sm hidden-md hidden-lg" style="display:block;"></br></br></span>
+			<div class="col-sm-4 text-center text-left-xs col-xs-12">
 				<p>
 					<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit" class="btn btn-primary">
 						<i class="fa fa-plus"></i>
@@ -498,7 +586,7 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 					</a>
 				</p>
 			</div>
-			<div class="col-sm-4 text-right">		
+			<div class="col-sm-4 text-right text-left-xs col-xs-12">		
 				<?php // TODO: Move to internal item/page
 				if (file_exists(WT_MODULES_DIR.$this->getName().'/readme.html')) { ?>
 					<a href="<?php echo WT_MODULES_DIR.$this->getName(); ?>/readme.html" class="btn btn-info">
