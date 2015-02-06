@@ -525,7 +525,7 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 						if ($item->gedcom_id==null) {
 							echo I18N::translate('All');
 						} else {
-							echo Tree::get($item->gedcom_id)->titleHtml();
+							echo Tree::get($item->gedcom_id)->getTitleHtml();
 						} ?>
 					</td>
 					<td>
