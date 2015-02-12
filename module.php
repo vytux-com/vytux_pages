@@ -204,7 +204,7 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 			}
 			$controller->pageHeader();
 			
-			if (array_key_exists('ckeditor', WT_Module::getActiveModules())) {
+			if (array_key_exists('ckeditor', Module::getActiveModules())) {
 				ckeditor_WT_Module::enableEditor($controller);
 			}
 			?>
