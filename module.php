@@ -105,10 +105,14 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 	public function getMenu() {
 		global $controller;
 		
+		$args                = array();
+		$args['block_order'] = 0;
+		$args['module_name'] = $this->getName();
+		
 		$block_id = Filter::get('block_id');
 		$default_block = Database::prepare(
-			"SELECT block_id FROM `##block` WHERE block_order=? AND module_name=?"
-		)->execute(array(0, $this->getName()))->fetchOne();
+			"SELECT block_id FROM `##block` WHERE block_order=:block_order AND module_name=:module_name"
+		)->execute($args)->fetchOne();
 
 		if (Auth::isSearchEngine()) {
 			return null;
@@ -169,24 +173,25 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 
 	// Action from the configuration page
 	private function edit() {
+		$args = array();
+		
 		if (Filter::postBool('save') && Filter::checkCsrf()) {
 			$block_id = Filter::post('block_id');
+			
 			if ($block_id) {
+				$args['tree_id']     = Filter::post('gedcom_id');
+				$args['block_order'] = (int)Filter::post('block_order');
+				$args['block_id']    = $block_id;
 				Database::prepare(
-					"UPDATE `##block` SET gedcom_id=NULLIF(?, ''), block_order=? WHERE block_id=?"
-				)->execute(array(
-					Filter::post('gedcom_id'),
-					(int)Filter::post('block_order'),
-					$block_id
-				));
+					"UPDATE `##block` SET gedcom_id=NULLIF(:tree_id, ''), block_order=:block_order WHERE block_id=:block_id"
+				)->execute($args);
 			} else {
+				$args['tree_id']     = Filter::post('gedcom_id');
+				$args['module_name'] = $this->getName();
+				$args['block_order'] = (int)Filter::post('block_order');
 				Database::prepare(
-					"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(?, ''), ?, ?)"
-				)->execute(array(
-					Filter::post('gedcom_id'),
-					$this->getName(),
-					(int)Filter::post('block_order')
-				));
+					"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(:tree_id, ''), :module_name, :block_order)"
+				)->execute($args);
 				$block_id = Database::getInstance()->lastInsertId();
 			}
 			set_block_setting($block_id, 'pages_title', Filter::post('pages_title'));
@@ -206,24 +211,26 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 			$controller->restrictAccess(WT_USER_CAN_EDIT);
 			if ($block_id) {
 				$controller->setPageTitle(I18N::translate('Edit pages'));
-				$items_title   = get_block_setting($block_id, 'pages_title');
-				$items_content = get_block_setting($block_id, 'pages_content');
-				$items_access  = get_block_setting($block_id, 'pages_access');
-				$block_order   = Database::prepare(
-					"SELECT block_order FROM `##block` WHERE block_id=?"
-				)->execute(array($block_id))->fetchOne();
-				$gedcom_id = Database::prepare(
-					"SELECT gedcom_id FROM `##block` WHERE block_id=?"
-				)->execute(array($block_id))->fetchOne();
+				$items_title      = get_block_setting($block_id, 'pages_title');
+				$items_content    = get_block_setting($block_id, 'pages_content');
+				$items_access     = get_block_setting($block_id, 'pages_access');
+				$args['block_id'] = $block_id;
+				$block_order      = Database::prepare(
+					"SELECT block_order FROM `##block` WHERE block_id=:block_id"
+				)->execute($args)->fetchOne();
+				$gedcom_id        = Database::prepare(
+					"SELECT gedcom_id FROM `##block` WHERE block_id=:block_id"
+				)->execute($args)->fetchOne();
 			} else {
 				$controller->setPageTitle(I18N::translate('Add pages'));
-				$items_title   = '';
-				$items_content = '';
-				$items_access  = 1;
-				$block_order   = Database::prepare(
-					"SELECT IFNULL(MAX(block_order)+1, 0) FROM `##block` WHERE module_name=?"
-				)->execute(array($this->getName()))->fetchOne();
-				$gedcom_id = WT_GED_ID;
+				$items_title         = '';
+				$items_content       = '';
+				$items_access        = 1;
+				$args['module_name'] = $this->getName();
+				$block_order         = Database::prepare(
+					"SELECT IFNULL(MAX(block_order)+1, 0) FROM `##block` WHERE module_name=:module_name"
+				)->execute($args)->fetchOne();
+				$gedcom_id           = WT_GED_ID;
 			}
 			$controller->pageHeader();
 			
@@ -366,15 +373,16 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 
 	private function delete() {
 		if (WT_USER_GEDCOM_ADMIN) {
-			$block_id = Filter::get('block_id');
+			$args             = array();
+			$args['block_id'] = Filter::get('block_id');
 
 			Database::prepare(
-				"DELETE FROM `##block_setting` WHERE block_id=?"
-			)->execute(array($block_id));
+				"DELETE FROM `##block_setting` WHERE block_id = :block_id"
+			)->execute($args);
 
 			Database::prepare(
-				"DELETE FROM `##block` WHERE block_id=?"
-			)->execute(array($block_id));
+				"DELETE FROM `##block` WHERE block_id = :block_id"
+			)->execute($args);
 		} else {
 			header('Location: ' . WT_BASE_URL);
 			exit;
@@ -383,27 +391,40 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 
 	private function moveUp() {
 		if (WT_USER_GEDCOM_ADMIN) {
-			$block_id = Filter::get('block_id');
+			$block_id         = Filter::get('block_id');
+			$args             = array();
+			$args['block_id'] = $block_id;
 
 			$block_order = Database::prepare(
-				"SELECT block_order FROM `##block` WHERE block_id=?"
-			)->execute(array($block_id))->fetchOne();
+				"SELECT block_order FROM `##block` WHERE block_id = :block_id"
+			)->execute($args)->fetchOne();
 
+			$args                = array();
+			$args['module_name'] = $this->getName();
+			$args['block_order'] = $block_order;
+			
 			$swap_block = Database::prepare(
 				"SELECT block_order, block_id".
 				" FROM `##block`".
-				" WHERE block_order=(".
-				"  SELECT MAX(block_order) FROM `##block` WHERE block_order < ? AND module_name=?".
-				" ) AND module_name=?".
+				" WHERE block_order = (".
+				"  SELECT MAX(block_order) FROM `##block` WHERE block_order < :block_order AND module_name = :module_name".
+				" ) AND module_name = :module_name".
 				" LIMIT 1"
-			)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
+			)->execute($args)->fetchOneRow();
 			if ($swap_block) {
+				$args                = array();
+				$args['block_id']    = $block_id;
+				$args['block_order'] = $swap_block->block_order;
 				Database::prepare(
-					"UPDATE `##block` SET block_order=? WHERE block_id=?"
-				)->execute(array($swap_block->block_order, $block_id));
+					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
+				)->execute($args);
+				
+				$args                = array();
+				$args['block_order'] = $block_order;
+				$args['block_id']    = $swap_block->block_id;
 				Database::prepare(
-					"UPDATE `##block` SET block_order=? WHERE block_id=?"
-				)->execute(array($block_order, $swap_block->block_id));
+					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
+				)->execute($args);
 			}
 		} else {
 			header('Location: ' . WT_BASE_URL);
@@ -413,27 +434,40 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 
 	private function moveDown() {
 		if (WT_USER_GEDCOM_ADMIN) {
-			$block_id = Filter::get('block_id');
+			$block_id         = Filter::get('block_id');
+			$args             = array();
+			$args['block_id'] = $block_id;
 
 			$block_order = Database::prepare(
-				"SELECT block_order FROM `##block` WHERE block_id=?"
-			)->execute(array($block_id))->fetchOne();
+				"SELECT block_order FROM `##block` WHERE block_id = :block_id"
+			)->execute($args)->fetchOne();
 
+			$args                = array();
+			$args['module_name'] = $this->getName();
+			$args['block_order'] = $block_order;
+			
 			$swap_block = Database::prepare(
 				"SELECT block_order, block_id".
 				" FROM `##block`".
-				" WHERE block_order=(".
-				"  SELECT MIN(block_order) FROM `##block` WHERE block_order>? AND module_name=?".
-				" ) AND module_name=?".
+				" WHERE block_order = (".
+				"  SELECT MIN(block_order) FROM `##block` WHERE block_order > :block_order AND module_name = :module_name".
+				" ) AND module_name = :module_name".
 				" LIMIT 1"
-			)->execute(array($block_order, $this->getName(), $this->getName()))->fetchOneRow();
+			)->execute($args)->fetchOneRow();
 			if ($swap_block) {
+				$args                = array();
+				$args['block_id']    = $block_id;
+				$args['block_order'] = $swap_block->block_order;
 				Database::prepare(
-					"UPDATE `##block` SET block_order=? WHERE block_id=?"
-				)->execute(array($swap_block->block_order, $block_id));
+					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
+				)->execute($args);
+				
+				$args                = array();
+				$args['block_order'] = $block_order;
+				$args['block_id']    = $swap_block->block_id;
 				Database::prepare(
-					"UPDATE `##block` SET block_order=? WHERE block_id=?"
-				)->execute(array($block_order, $swap_block->block_id));
+					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
+				)->execute($args);
 			}
 		} else {
 			header('Location: ' . WT_BASE_URL);
@@ -491,25 +525,29 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 			->setPageTitle($this->getTitle())
 			->pageHeader();
 
+		$args                = array();
+		$args['module_name'] = $this->getName();
+		$args['tree_id']     = WT_GED_ID;
 		$items = Database::prepare(
-			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='pages_title'".
-			" AND bs2.setting_name='pages_content'".
-			" AND IFNULL(gedcom_id, ?)=?".
+			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content" .
+			" FROM `##block` b" .
+			" JOIN `##block_setting` bs1 USING (block_id)" .
+			" JOIN `##block_setting` bs2 USING (block_id)" .
+			" WHERE module_name = :module_name" .
+			" AND bs1.setting_name='pages_title'" .
+			" AND bs2.setting_name='pages_content'" .
+			" AND IFNULL(gedcom_id, :tree_id) = :tree_id" .
 			" ORDER BY block_order"
-		)->execute(array($this->getName(), WT_GED_ID, WT_GED_ID))->fetchAll();
+		)->execute($args)->fetchAll();
 
+		unset($args['tree_id']);
 		$min_block_order = Database::prepare(
-			"SELECT MIN(block_order) FROM `##block` WHERE module_name=?"
-		)->execute(array($this->getName()))->fetchOne();
+			"SELECT MIN(block_order) FROM `##block` WHERE module_name = :module_name"
+		)->execute($args)->fetchOne();
 
 		$max_block_order = Database::prepare(
-			"SELECT MAX(block_order) FROM `##block` WHERE module_name=?"
-		)->execute(array($this->getName()))->fetchOne();
+			"SELECT MAX(block_order) FROM `##block` WHERE module_name = :module_name"
+		)->execute($args)->fetchOne();
 		?>
 		<style>
 			.text-left-not-xs, .text-left-not-sm, .text-left-not-md, .text-left-not-lg {
@@ -701,34 +739,39 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 
 	// Return the list of pages
 	private function getPagesList() {
+		$args                = array();
+		$args['module_name'] = $this->getName();
+		$args['tree_id']     = WT_GED_ID;
 		return Database::prepare(
-			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access, bs3.setting_value AS pages_content".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" JOIN `##block_setting` bs3 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='pages_title'".
-			" AND bs2.setting_name='pages_access'".
-			" AND bs3.setting_name='pages_content'".
-			" AND (gedcom_id IS NULL OR gedcom_id=?)".
+			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access, bs3.setting_value AS pages_content" .
+			" FROM `##block` b" .
+			" JOIN `##block_setting` bs1 USING (block_id)" .
+			" JOIN `##block_setting` bs2 USING (block_id)" .
+			" JOIN `##block_setting` bs3 USING (block_id)" .
+			" WHERE module_name = :module_name" .
+			" AND bs1.setting_name='pages_title'" .
+			" AND bs2.setting_name='pages_access'" .
+			" AND bs3.setting_name='pages_content'" .
+			" AND (gedcom_id IS NULL OR gedcom_id = :tree_id)" .
 			" ORDER BY block_order"
-		)->execute(array($this->getName(), WT_GED_ID))->fetchAll();
+		)->execute($args)->fetchAll();
 	}
 	
 	// Return the list of pages for menu
 	private function getMenupagesList() {
+		$args                = array();
+		$args['module_name'] = $this->getName();
+		$args['tree_id']     = WT_GED_ID;
 		return Database::prepare(
-			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access".
-			" FROM `##block` b".
-			" JOIN `##block_setting` bs1 USING (block_id)".
-			" JOIN `##block_setting` bs2 USING (block_id)".
-			" WHERE module_name=?".
-			" AND bs1.setting_name='pages_title'".
-			" AND bs2.setting_name='pages_access'".
-			" AND (gedcom_id IS NULL OR gedcom_id=?)".
+			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access" .
+			" FROM `##block` b" .
+			" JOIN `##block_setting` bs1 USING (block_id)" .
+			" JOIN `##block_setting` bs2 USING (block_id)" .
+			" WHERE module_name = :module_name" .
+			" AND bs1.setting_name='pages_title'" .
+			" AND bs2.setting_name='pages_access'" .
+			" AND (gedcom_id IS NULL OR gedcom_id = :tree_id)" .
 			" ORDER BY block_order"
-		)->execute(array($this->getName(), WT_GED_ID))->fetchAll();
+		)->execute($args)->fetchAll();
 	}
-	
 }
