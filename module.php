@@ -103,14 +103,14 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 
 	// Implement WT_Module_Menu
 	public function getMenu() {
-		global $controller, $SEARCH_SPIDER;
+		global $controller;
 		
 		$block_id = Filter::get('block_id');
 		$default_block = Database::prepare(
 			"SELECT block_id FROM `##block` WHERE block_order=? AND module_name=?"
 		)->execute(array(0, $this->getName()))->fetchOne();
 
-		if ($SEARCH_SPIDER) {
+		if (Auth::isSearchEngine()) {
 			return null;
 		}
 		
