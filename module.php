@@ -25,10 +25,10 @@ namespace Fisharebest\Webtrees;
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
-class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, ModuleConfigInterface, ModuleMenuInterface {
+class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleConfigInterface, ModuleMenuInterface {
 
 	public function __construct() {
-		parent::__construct();
+		parent::__construct('vytux_pages');
 		// Load any local user translations
 		if (is_dir(WT_MODULES_DIR . $this->getName() . '/language')) {
 			if (file_exists(WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.mo')) {
@@ -775,3 +775,4 @@ class vytux_pages_WT_Module extends Module implements ModuleBlockInterface, Modu
 		)->execute($args)->fetchAll();
 	}
 }
+return new VytuxPagesModule;
