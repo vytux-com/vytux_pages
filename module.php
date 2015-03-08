@@ -1,5 +1,5 @@
 <?php
-namespace Fisharebest\Webtrees;
+namespace Vytux\webtrees_vytux_pages;
 
 // webtrees - vytux_pages module based on simpl_pages
 //
@@ -24,25 +24,26 @@ namespace Fisharebest\Webtrees;
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
+use Fisharebest\Webtrees as webtrees;
 
-class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleConfigInterface, ModuleMenuInterface {
+class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockInterface, webtrees\ModuleConfigInterface, webtrees\ModuleMenuInterface {
 
 	public function __construct() {
 		parent::__construct('vytux_pages');
 		// Load any local user translations
 		if (is_dir(WT_MODULES_DIR . $this->getName() . '/language')) {
 			if (file_exists(WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.mo')) {
-				I18N::addTranslation(
+				webtrees\I18N::addTranslation(
 					new Zend_Translate('gettext', WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.mo', WT_LOCALE)
 				);
 			}
 			if (file_exists(WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.php')) {
-				I18N::addTranslation(
+				webtrees\I18N::addTranslation(
 					new Zend_Translate('array', WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.php', WT_LOCALE)
 				);
 			}
 			if (file_exists(WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.csv')) {
-				I18N::addTranslation(
+				webtrees\I18N::addTranslation(
 					new Zend_Translate('csv', WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.csv', WT_LOCALE)
 				);
 			}
@@ -51,16 +52,16 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 
 	// Extend class WT_Module
 	public function getTitle() {
-		return I18N::translate('Vytux Pages');
+		return webtrees\I18N::translate('Vytux Pages');
 	}
 
 	public function getMenuTitle() {
-		return I18N::translate('Resources');
+		return webtrees\I18N::translate('Resources');
 	}
 
 	// Extend class WT_Module
 	public function getDescription() {
-		return I18N::translate('Display resource pages.');
+		return webtrees\I18N::translate('Display resource pages.');
 	}
 
 	// Implement WT_Module_Menu
@@ -109,34 +110,34 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 		$args['block_order'] = 0;
 		$args['module_name'] = $this->getName();
 		
-		$block_id = Filter::get('block_id');
-		$default_block = Database::prepare(
+		$block_id = webtrees\Filter::get('block_id');
+		$default_block = webtrees\Database::prepare(
 			"SELECT block_id FROM `##block` WHERE block_order=:block_order AND module_name=:module_name"
 		)->execute($args)->fetchOne();
 
-		if (Auth::isSearchEngine()) {
+		if (webtrees\Auth::isSearchEngine()) {
 			return null;
 		}
 		
-		if (file_exists(WT_MODULES_DIR . $this->getName() . '/themes/' . Theme::theme()->themeId() . '/')) {
-			echo '<link rel="stylesheet" href="' . WT_MODULES_DIR . $this->getName() . '/themes/' . Theme::theme()->themeId() . '/style.css" type="text/css">';
+		if (file_exists(WT_MODULES_DIR . $this->getName() . '/themes/' . webtrees\Theme::theme()->themeId() . '/')) {
+			echo '<link rel="stylesheet" href="' . WT_MODULES_DIR . $this->getName() . '/themes/' . webtrees\Theme::theme()->themeId() . '/style.css" type="text/css">';
 		} else {
 			echo '<link rel="stylesheet" href="' . WT_MODULES_DIR . $this->getName() . '/themes/webtrees/style.css" type="text/css">';
 		}
 		
 		//-- main PAGES menu item
-		$menu = new Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $default_block, 'menu-my_pages', 'down');
+		$menu = new webtrees\Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $default_block, 'menu-my_pages', 'down');
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 		foreach ($this->getMenupagesList() as $items) {
-			$languages = get_block_setting($items->block_id, 'languages');
+			$languages = webtrees\get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= WT_USER_ACCESS_LEVEL) {
 				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id;
-				$submenu = new Menu(I18N::translate($items->pages_title), $path, 'menu-my_pages-' . $items->block_id);
+				$submenu = new webtrees\Menu(webtrees\I18N::translate($items->pages_title), $path, 'menu-my_pages-' . $items->block_id);
 				$menu->addSubmenu($submenu);
 			}
 		}
-		if (Auth::isAdmin()) {
-			$submenu = new Menu(I18N::translate('Edit pages'), $this->getConfigLink(), 'menu-my_pages-edit');
+		if (webtrees\Auth::isAdmin()) {
+			$submenu = new webtrees\Menu(webtrees\I18N::translate('Edit pages'), $this->getConfigLink(), 'menu-my_pages-edit');
 			$menu->addSubmenu($submenu);
 		}
 		return $menu;
@@ -175,86 +176,86 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 	private function edit() {
 		$args = array();
 		
-		if (Filter::postBool('save') && Filter::checkCsrf()) {
-			$block_id = Filter::post('block_id');
+		if (webtrees\Filter::postBool('save') && webtrees\Filter::checkCsrf()) {
+			$block_id = webtrees\Filter::post('block_id');
 			
 			if ($block_id) {
-				$args['tree_id']     = Filter::post('gedcom_id');
-				$args['block_order'] = (int)Filter::post('block_order');
+				$args['tree_id']     = webtrees\Filter::post('gedcom_id');
+				$args['block_order'] = (int)webtrees\Filter::post('block_order');
 				$args['block_id']    = $block_id;
-				Database::prepare(
+				webtrees\Database::prepare(
 					"UPDATE `##block` SET gedcom_id=NULLIF(:tree_id, ''), block_order=:block_order WHERE block_id=:block_id"
 				)->execute($args);
 			} else {
-				$args['tree_id']     = Filter::post('gedcom_id');
+				$args['tree_id']     = webtrees\Filter::post('gedcom_id');
 				$args['module_name'] = $this->getName();
-				$args['block_order'] = (int)Filter::post('block_order');
-				Database::prepare(
+				$args['block_order'] = (int)webtrees\Filter::post('block_order');
+				webtrees\Database::prepare(
 					"INSERT INTO `##block` (gedcom_id, module_name, block_order) VALUES (NULLIF(:tree_id, ''), :module_name, :block_order)"
 				)->execute($args);
-				$block_id = Database::getInstance()->lastInsertId();
+				$block_id = webtrees\Database::getInstance()->lastInsertId();
 			}
-			set_block_setting($block_id, 'pages_title', Filter::post('pages_title'));
-			set_block_setting($block_id, 'pages_content', Filter::post('pages_content')); // allow html
-			set_block_setting($block_id, 'pages_access', Filter::post('pages_access'));
+			webtrees\set_block_setting($block_id, 'pages_title', webtrees\Filter::post('pages_title'));
+			webtrees\set_block_setting($block_id, 'pages_content', webtrees\Filter::post('pages_content')); // allow html
+			webtrees\set_block_setting($block_id, 'pages_access', webtrees\Filter::post('pages_access'));
 			$languages = array();
-			foreach (I18N::installed_languages() as $code=>$name) {
-				if (Filter::postBool('lang_'.$code)) {
+			foreach (webtrees\I18N::installedLanguages() as $code=>$name) {
+				if (webtrees\Filter::postBool('lang_'.$code)) {
 					$languages[] = $code;
 				}
 			}
-			set_block_setting($block_id, 'languages', implode(',', $languages));
+			webtrees\set_block_setting($block_id, 'languages', implode(',', $languages));
 			$this->config();
 		} else {
-			$block_id = Filter::get('block_id');
-			$controller = new PageController();
+			$block_id = webtrees\Filter::get('block_id');
+			$controller = new webtrees\PageController();
 			$controller->restrictAccess(WT_USER_CAN_EDIT);
 			if ($block_id) {
-				$controller->setPageTitle(I18N::translate('Edit pages'));
-				$items_title      = get_block_setting($block_id, 'pages_title');
-				$items_content    = get_block_setting($block_id, 'pages_content');
-				$items_access     = get_block_setting($block_id, 'pages_access');
+				$controller->setPageTitle(webtrees\I18N::translate('Edit pages'));
+				$items_title      = webtrees\get_block_setting($block_id, 'pages_title');
+				$items_content    = webtrees\get_block_setting($block_id, 'pages_content');
+				$items_access     = webtrees\get_block_setting($block_id, 'pages_access');
 				$args['block_id'] = $block_id;
-				$block_order      = Database::prepare(
+				$block_order      = webtrees\Database::prepare(
 					"SELECT block_order FROM `##block` WHERE block_id=:block_id"
 				)->execute($args)->fetchOne();
-				$gedcom_id        = Database::prepare(
+				$gedcom_id        = webtrees\Database::prepare(
 					"SELECT gedcom_id FROM `##block` WHERE block_id=:block_id"
 				)->execute($args)->fetchOne();
 			} else {
-				$controller->setPageTitle(I18N::translate('Add pages'));
+				$controller->setPageTitle(webtrees\I18N::translate('Add pages'));
 				$items_title         = '';
 				$items_content       = '';
 				$items_access        = 1;
 				$args['module_name'] = $this->getName();
-				$block_order         = Database::prepare(
+				$block_order         = webtrees\Database::prepare(
 					"SELECT IFNULL(MAX(block_order)+1, 0) FROM `##block` WHERE module_name=:module_name"
 				)->execute($args)->fetchOne();
 				$gedcom_id           = WT_GED_ID;
 			}
 			$controller->pageHeader();
 			
-			if (array_key_exists('ckeditor', Module::getActiveModules())) {
-				ckeditor_WT_Module::enableEditor($controller);
+			if (webtrees\Module::getModuleByName('ckeditor')) {
+				webtrees\CkeditorModule::enableEditor($controller);
 			}
 			?>
 			
 			<ol class="breadcrumb small">
-				<li><a href="admin.php"><?php echo I18N::translate('Control panel'); ?></a></li>
-				<li><a href="admin_modules.php"><?php echo I18N::translate('Module administration'); ?></a></li>
-				<li><a href="module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config"><?php echo I18N::translate($this->getTitle()); ?></a></li>
+				<li><a href="admin.php"><?php echo webtrees\I18N::translate('Control panel'); ?></a></li>
+				<li><a href="admin_modules.php"><?php echo webtrees\I18N::translate('Module administration'); ?></a></li>
+				<li><a href="module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config"><?php echo webtrees\I18N::translate($this->getTitle()); ?></a></li>
 				<li class="active"><?php echo $controller->getPageTitle(); ?></li>
 			</ol>
 
 			<form class="form-horizontal" method="POST" action="#" name="pages" id="pagesForm">
-				<?php echo Filter::getCsrf(); ?>
+				<?php echo webtrees\Filter::getCsrf(); ?>
 				<input type="hidden" name="save" value="1">
 				<input type="hidden" name="block_id" value="<?php echo $block_id; ?>">
-				<h3><?php echo I18N::translate('General'); ?></h3>
+				<h3><?php echo webtrees\I18N::translate('General'); ?></h3>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="pages_title">
-						<?php echo I18N::translate('Title'); ?>
+						<?php echo webtrees\I18N::translate('Title'); ?>
 					</label>
 					<div class="col-sm-9">
 						<input
@@ -264,13 +265,13 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 							name="pages_title"
 							required
 							type="text"
-							value="<?php echo Filter::escapeHtml($items_title); ?>"
+							value="<?php echo webtrees\Filter::escapeHtml($items_title); ?>"
 							>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="pages_content">
-						<?php echo I18N::translate('Content'); ?>
+						<?php echo webtrees\I18N::translate('Content'); ?>
 					</label>
 					<div class="col-sm-9">
 						<textarea
@@ -281,21 +282,21 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 							name="pages_content"
 							required
 							type="text">
-								<?php echo Filter::escapeHtml($items_content); ?>
+								<?php echo webtrees\Filter::escapeHtml($items_content); ?>
 						</textarea>
 					</div>
 				</div>
 				
-				<h3><?php echo I18N::translate('Languages'); ?></h3>
+				<h3><?php echo webtrees\I18N::translate('Languages'); ?></h3>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="lang_*">
-						<?php echo I18N::translate('Show this page for which languages?'); ?>
+						<?php echo webtrees\I18N::translate('Show this page for which languages?'); ?>
 					</label>
 					<div class="row col-sm-9">
 						<?php 
-							$accepted_languages=explode(',', get_block_setting($block_id, 'languages'));
-							foreach (I18N::installed_languages() as $locale => $language) {
+							$accepted_languages=explode(',', webtrees\get_block_setting($block_id, 'languages'));
+							foreach (webtrees\I18N::installedLanguages() as $locale => $language) {
 								$checked = in_array($locale, $accepted_languages) ? 'checked' : ''; 
 						?>
 								<div class="col-sm-3">
@@ -307,11 +308,11 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 					</div>
 				</div>
 				
-				<h3><?php echo I18N::translate('Visibility and Access'); ?></h3>
+				<h3><?php echo webtrees\I18N::translate('Visibility and Access'); ?></h3>
 				
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="block_order">
-						<?php echo I18N::translate('Pages position'); ?>
+						<?php echo webtrees\I18N::translate('Pages position'); ?>
 					</label>
 					<div class="col-sm-9">
 						<input
@@ -321,49 +322,49 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 							size="3"
 							required
 							type="number"
-							value="<?php echo Filter::escapeHtml($block_order); ?>"
+							value="<?php echo webtrees\Filter::escapeHtml($block_order); ?>"
 						>
 					</div>
 					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
 						<?php 
-							echo I18N::translate('This field controls the order in which the pages are displayed.'),
+							echo webtrees\I18N::translate('This field controls the order in which the pages are displayed.'),
 							'<br><br>',
-							I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.'),
+							webtrees\I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.'),
 							'<br><br>',
-							I18N::translate('When more than one page has the same position number, only one of these pages will be visible.');
+							webtrees\I18N::translate('When more than one page has the same position number, only one of these pages will be visible.');
 						?>
 					</span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="block_order">
-						<?php echo I18N::translate('Pages visibility'); ?>
+						<?php echo webtrees\I18N::translate('Pages visibility'); ?>
 					</label>
 					<div class="col-sm-9">
-						<?php echo select_edit_control('gedcom_id', Tree::getIdList(), I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
+						<?php echo webtrees\select_edit_control('gedcom_id', webtrees\Tree::getIdList(), webtrees\I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
 					</div>
 					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
 						<?php 
-							echo I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.');
+							echo webtrees\I18N::translate('You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree.');
 						?>
 					</span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="pages_access">
-						<?php echo I18N::translate('Access level'); ?>
+						<?php echo webtrees\I18N::translate('Access level'); ?>
 					</label>
 					<div class="col-sm-9">
-						<?php echo edit_field_access_level('pages_access', $items_access, 'class="form-control"'); ?>
+						<?php echo webtrees\edit_field_access_level('pages_access', $items_access, 'class="form-control"'); ?>
 					</div>
 				</div>
 				
 				<div class="row col-sm-9 col-sm-offset-3">
 					<button class="btn btn-primary" type="submit">
 						<i class="fa fa-check"></i>
-						<?php echo I18N::translate('save'); ?>
+						<?php echo webtrees\I18N::translate('save'); ?>
 					</button>
 					<button class="btn" type="button" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
 						<i class="fa fa-close"></i>
-						<?php echo I18N::translate('cancel'); ?>
+						<?php echo webtrees\I18N::translate('cancel'); ?>
 					</button>
 				</div>
 			</form>
@@ -374,13 +375,13 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 	private function delete() {
 		if (WT_USER_GEDCOM_ADMIN) {
 			$args             = array();
-			$args['block_id'] = Filter::get('block_id');
+			$args['block_id'] = webtrees\Filter::get('block_id');
 
-			Database::prepare(
+			webtrees\Database::prepare(
 				"DELETE FROM `##block_setting` WHERE block_id = :block_id"
 			)->execute($args);
 
-			Database::prepare(
+			webtrees\Database::prepare(
 				"DELETE FROM `##block` WHERE block_id = :block_id"
 			)->execute($args);
 		} else {
@@ -391,11 +392,11 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 
 	private function moveUp() {
 		if (WT_USER_GEDCOM_ADMIN) {
-			$block_id         = Filter::get('block_id');
+			$block_id         = webtrees\Filter::get('block_id');
 			$args             = array();
 			$args['block_id'] = $block_id;
 
-			$block_order = Database::prepare(
+			$block_order = webtrees\Database::prepare(
 				"SELECT block_order FROM `##block` WHERE block_id = :block_id"
 			)->execute($args)->fetchOne();
 
@@ -403,7 +404,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 			$args['module_name'] = $this->getName();
 			$args['block_order'] = $block_order;
 			
-			$swap_block = Database::prepare(
+			$swap_block = webtrees\Database::prepare(
 				"SELECT block_order, block_id".
 				" FROM `##block`".
 				" WHERE block_order = (".
@@ -415,14 +416,14 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 				$args                = array();
 				$args['block_id']    = $block_id;
 				$args['block_order'] = $swap_block->block_order;
-				Database::prepare(
+				webtrees\Database::prepare(
 					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
 				)->execute($args);
 				
 				$args                = array();
 				$args['block_order'] = $block_order;
 				$args['block_id']    = $swap_block->block_id;
-				Database::prepare(
+				webtrees\Database::prepare(
 					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
 				)->execute($args);
 			}
@@ -434,11 +435,11 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 
 	private function moveDown() {
 		if (WT_USER_GEDCOM_ADMIN) {
-			$block_id         = Filter::get('block_id');
+			$block_id         = webtrees\Filter::get('block_id');
 			$args             = array();
 			$args['block_id'] = $block_id;
 
-			$block_order = Database::prepare(
+			$block_order = webtrees\Database::prepare(
 				"SELECT block_order FROM `##block` WHERE block_id = :block_id"
 			)->execute($args)->fetchOne();
 
@@ -446,7 +447,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 			$args['module_name'] = $this->getName();
 			$args['block_order'] = $block_order;
 			
-			$swap_block = Database::prepare(
+			$swap_block = webtrees\Database::prepare(
 				"SELECT block_order, block_id".
 				" FROM `##block`".
 				" WHERE block_order = (".
@@ -458,14 +459,14 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 				$args                = array();
 				$args['block_id']    = $block_id;
 				$args['block_order'] = $swap_block->block_order;
-				Database::prepare(
+				webtrees\Database::prepare(
 					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
 				)->execute($args);
 				
 				$args                = array();
 				$args['block_order'] = $block_order;
 				$args['block_id']    = $swap_block->block_id;
-				Database::prepare(
+				webtrees\Database::prepare(
 					"UPDATE `##block` SET block_order = :block_order WHERE block_id = :block_id"
 				)->execute($args);
 			}
@@ -478,9 +479,9 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 	private function show() {
 		global $controller;
 		$items_header_description = '';//Add your own header here.
-		$items_id = Filter::get('pages_id');
-		$controller = new PageController();
-		$controller->setPageTitle(I18N::translate('Resource pages'))//Edit this line for a different summary page title
+		$items_id = webtrees\Filter::get('pages_id');
+		$controller = new webtrees\PageController();
+		$controller->setPageTitle(webtrees\I18N::translate('Resource pages'))//Edit this line for a different summary page title
 			->pageHeader();
 		// HTML common to all pages
 		$html = '<div id="pages-container">' . 
@@ -491,25 +492,25 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 				'<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">';
 		$items_list = $this->getPagesList();
 		foreach ($items_list as $items) {
-			$languages = get_block_setting($items->block_id, 'languages');
+			$languages = webtrees\get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= WT_USER_ACCESS_LEVEL) {
 				$html .= '<li class="ui-state-default ui-corner-top' . ($items_id==$items->block_id ? ' ui-tabs-selected ui-state-active' : '') . '">' .
 					'<a href="module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id . '">' .
-					'<span title="' . str_replace("{@PERC@}", "%", I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))) . '">' . str_replace("{@PERC@}", "%", I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))) . '</span></a></li>';
+					'<span title="' . str_replace("{@PERC@}", "%", webtrees\I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))) . '">' . str_replace("{@PERC@}", "%", webtrees\I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))) . '</span></a></li>';
 			}
 		}
 		$html .= '</ul>';
 		$html .= '<div id="outer_pages_container" style="padding: 1em;">';
 		foreach ($items_list as $items) {
-			$languages = get_block_setting($items->block_id, 'languages');
+			$languages = webtrees\get_block_setting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items_id == $items->block_id && $items->pages_access >= WT_USER_ACCESS_LEVEL) {
-				$items_content = str_replace("{@PERC@}", "%", I18N::translate(str_replace("%", "{@PERC@}", $items->pages_content)));
+				$items_content = str_replace("{@PERC@}", "%", webtrees\I18N::translate(str_replace("%", "{@PERC@}", $items->pages_content)));
 			}
 		}
 		if (isset($items_content)){
 			$html .= $items_content;
 		} else {
-			$html .= I18N::translate('No content found for current access level and language');
+			$html .= webtrees\I18N::translate('No content found for current access level and language');
 		}
 		$html .= '</div>'; //close outer_pages_container
 		$html .= '</div>'; //close pages_tabs
@@ -519,7 +520,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 	}
 
 	private function config() {
-		$controller = new PageController();
+		$controller = new webtrees\PageController();
 		$controller
 			->restrictAccess(WT_USER_GEDCOM_ADMIN)
 			->setPageTitle($this->getTitle())
@@ -528,7 +529,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 		$args                = array();
 		$args['module_name'] = $this->getName();
 		$args['tree_id']     = WT_GED_ID;
-		$items = Database::prepare(
+		$items = webtrees\Database::prepare(
 			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content" .
 			" FROM `##block` b" .
 			" JOIN `##block_setting` bs1 USING (block_id)" .
@@ -541,11 +542,11 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 		)->execute($args)->fetchAll();
 
 		unset($args['tree_id']);
-		$min_block_order = Database::prepare(
+		$min_block_order = webtrees\Database::prepare(
 			"SELECT MIN(block_order) FROM `##block` WHERE module_name = :module_name"
 		)->execute($args)->fetchOne();
 
-		$max_block_order = Database::prepare(
+		$max_block_order = webtrees\Database::prepare(
 			"SELECT MAX(block_order) FROM `##block` WHERE module_name = :module_name"
 		)->execute($args)->fetchOne();
 		?>
@@ -634,8 +635,8 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 		</style>
 		
 		<ol class="breadcrumb small">
-			<li><a href="admin.php"><?php echo I18N::translate('Control panel'); ?></a></li>
-			<li><a href="admin_modules.php"><?php echo I18N::translate('Module administration'); ?></a></li>
+			<li><a href="admin.php"><?php echo webtrees\I18N::translate('Control panel'); ?></a></li>
+			<li><a href="admin_modules.php"><?php echo webtrees\I18N::translate('Module administration'); ?></a></li>
 			<li class="active"><?php echo $controller->getPageTitle(); ?></li>
 		</ol>
 		
@@ -643,15 +644,15 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 			<div class="col-sm-4 col-xs-12">
 				<form class="form">
 					<label for="ged" class="sr-only">
-						<?php echo I18N::translate('Family tree'); ?>
+						<?php echo webtrees\I18N::translate('Family tree'); ?>
 					</label>
 					<input type="hidden" name="mod" value="<?php echo  $this->getName(); ?>">
 					<input type="hidden" name="mod_action" value="admin_config">
 					<div class="col-sm-9 col-xs-9" style="padding:0;">
-						<?php echo select_edit_control('ged', Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
+						<?php echo webtrees\select_edit_control('ged', webtrees\Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
 					</div>
 					<div class="col-sm-3" style="padding:0;">
-						<input type="submit" class="btn btn-primary" value="<?php echo I18N::translate('show'); ?>">
+						<input type="submit" class="btn btn-primary" value="<?php echo webtrees\I18N::translate('show'); ?>">
 					</div>
 				</form>
 			</div>
@@ -660,7 +661,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 				<p>
 					<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit" class="btn btn-primary">
 						<i class="fa fa-plus"></i>
-						<?php echo I18N::translate('Add page'); ?>
+						<?php echo webtrees\I18N::translate('Add page'); ?>
 					</a>
 				</p>
 			</div>
@@ -669,7 +670,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 				if (file_exists(WT_MODULES_DIR . $this->getName() . '/readme.html')) { ?>
 					<a href="<?php echo WT_MODULES_DIR . $this->getName(); ?>/readme.html" class="btn btn-info">
 						<i class="fa fa-newspaper-o"></i>
-						<?php echo I18N::translate('ReadMe'); ?>
+						<?php echo webtrees\I18N::translate('ReadMe'); ?>
 					</a>
 				<?php } ?>
 			</div>
@@ -678,9 +679,9 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 		<table class="table table-bordered table-condensed">
 			<thead>
 				<tr>
-					<th class="col-sm-2"><?php echo I18N::translate('Position'); ?></th>
-					<th class="col-sm-3"><?php echo I18N::translate('Title'); ?></th>
-					<th class="col-sm-1" colspan=4><?php echo I18N::translate('Controls'); ?></th>
+					<th class="col-sm-2"><?php echo webtrees\I18N::translate('Position'); ?></th>
+					<th class="col-sm-3"><?php echo webtrees\I18N::translate('Title'); ?></th>
+					<th class="col-sm-1" colspan=4><?php echo webtrees\I18N::translate('Controls'); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -689,13 +690,13 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 					<td>
 						<?php echo $item->block_order, ', ';
 						if ($item->gedcom_id == null) {
-							echo I18N::translate('All');
+							echo webtrees\I18N::translate('All');
 						} else {
-							echo Tree::findById($item->gedcom_id)->getTitleHtml();
+							echo webtrees\Tree::findById($item->gedcom_id)->getTitleHtml();
 						} ?>
 					</td>
 					<td>
-						<?php echo Filter::escapeHtml(I18N::translate($item->pages_title)); ?>
+						<?php echo webtrees\Filter::escapeHtml(webtrees\I18N::translate($item->pages_title)); ?>
 					</td>
 					<td class="text-center">
 						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_edit&amp;block_id=<?php echo $item->block_id; ?>">
@@ -726,7 +727,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 					</td>
 					<td class="text-center">
 						<a href="module.php?mod=<?php echo $this->getName(); ?>&amp;mod_action=admin_delete&amp;block_id=<?php echo $item->block_id; ?>"
-							onclick="return confirm('<?php echo I18N::translate('Are you sure you want to delete this page?'); ?>');">
+							onclick="return confirm('<?php echo webtrees\I18N::translate('Are you sure you want to delete this page?'); ?>');">
 							<div class="icon-delete">&nbsp;</div>
 						</a>
 					</td>
@@ -742,7 +743,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 		$args                = array();
 		$args['module_name'] = $this->getName();
 		$args['tree_id']     = WT_GED_ID;
-		return Database::prepare(
+		return webtrees\Database::prepare(
 			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access, bs3.setting_value AS pages_content" .
 			" FROM `##block` b" .
 			" JOIN `##block_setting` bs1 USING (block_id)" .
@@ -762,7 +763,7 @@ class VytuxPagesModule extends Module implements ModuleBlockInterface, ModuleCon
 		$args                = array();
 		$args['module_name'] = $this->getName();
 		$args['tree_id']     = WT_GED_ID;
-		return Database::prepare(
+		return webtrees\Database::prepare(
 			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access" .
 			" FROM `##block` b" .
 			" JOIN `##block_setting` bs1 USING (block_id)" .
