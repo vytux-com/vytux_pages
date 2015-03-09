@@ -71,7 +71,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 
 	// Extend class WT_Module
 	public function defaultAccessLevel() {
-		return WT_PRIV_NONE;
+		return webtrees\Auth::PRIV_NONE;
 	}
 
 	// Implement WT_Module_Config
@@ -174,6 +174,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 
 	// Action from the configuration page
 	private function edit() {
+		global $WT_TREE;
 		$args = array();
 		
 		if (webtrees\Filter::postBool('save') && webtrees\Filter::checkCsrf()) {
@@ -209,7 +210,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 		} else {
 			$block_id = webtrees\Filter::get('block_id');
 			$controller = new webtrees\PageController();
-			$controller->restrictAccess(WT_USER_CAN_EDIT);
+			$controller->restrictAccess(webtrees\Auth::isEditor($WT_TREE));
 			if ($block_id) {
 				$controller->setPageTitle(webtrees\I18N::translate('Edit pages'));
 				$items_title      = webtrees\get_block_setting($block_id, 'pages_title');
@@ -231,7 +232,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 				$block_order         = webtrees\Database::prepare(
 					"SELECT IFNULL(MAX(block_order)+1, 0) FROM `##block` WHERE module_name=:module_name"
 				)->execute($args)->fetchOne();
-				$gedcom_id           = WT_GED_ID;
+				$gedcom_id           = $WT_TREE->getTreeId();
 			}
 			$controller->pageHeader();
 			
@@ -373,7 +374,9 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 	}
 
 	private function delete() {
-		if (WT_USER_GEDCOM_ADMIN) {
+		global $WT_TREE;
+		
+		if (webtrees\Auth::isManager($WT_TREE)) {
 			$args             = array();
 			$args['block_id'] = webtrees\Filter::get('block_id');
 
@@ -391,7 +394,9 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 	}
 
 	private function moveUp() {
-		if (WT_USER_GEDCOM_ADMIN) {
+		global $WT_TREE;
+		
+		if (webtrees\Auth::isManager($WT_TREE)) {
 			$block_id         = webtrees\Filter::get('block_id');
 			$args             = array();
 			$args['block_id'] = $block_id;
@@ -434,7 +439,9 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 	}
 
 	private function moveDown() {
-		if (WT_USER_GEDCOM_ADMIN) {
+		global $WT_TREE;
+		
+		if (webtrees\Auth::isManager($WT_TREE)) {
 			$block_id         = webtrees\Filter::get('block_id');
 			$args             = array();
 			$args['block_id'] = $block_id;
@@ -520,15 +527,17 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 	}
 
 	private function config() {
+		global $WT_TREE;
+		
 		$controller = new webtrees\PageController();
 		$controller
-			->restrictAccess(WT_USER_GEDCOM_ADMIN)
+			->restrictAccess(webtrees\Auth::isAdmin())
 			->setPageTitle($this->getTitle())
 			->pageHeader();
 
 		$args                = array();
 		$args['module_name'] = $this->getName();
-		$args['tree_id']     = WT_GED_ID;
+		$args['tree_id']     = $WT_TREE->getTreeId();
 		$items = webtrees\Database::prepare(
 			"SELECT block_id, block_order, gedcom_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_content" .
 			" FROM `##block` b" .
@@ -649,7 +658,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 					<input type="hidden" name="mod" value="<?php echo  $this->getName(); ?>">
 					<input type="hidden" name="mod_action" value="admin_config">
 					<div class="col-sm-9 col-xs-9" style="padding:0;">
-						<?php echo webtrees\select_edit_control('ged', webtrees\Tree::getNameList(), null, WT_GEDCOM, 'class="form-control"'); ?>
+						<?php echo webtrees\select_edit_control('ged', webtrees\Tree::getNameList(), null, $WT_TREE->getName(), 'class="form-control"'); ?>
 					</div>
 					<div class="col-sm-3" style="padding:0;">
 						<input type="submit" class="btn btn-primary" value="<?php echo webtrees\I18N::translate('show'); ?>">
@@ -740,9 +749,11 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 
 	// Return the list of pages
 	private function getPagesList() {
+		global $WT_TREE;
+		
 		$args                = array();
 		$args['module_name'] = $this->getName();
-		$args['tree_id']     = WT_GED_ID;
+		$args['tree_id']     = $WT_TREE->getTreeId();
 		return webtrees\Database::prepare(
 			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access, bs3.setting_value AS pages_content" .
 			" FROM `##block` b" .
@@ -760,9 +771,11 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 	
 	// Return the list of pages for menu
 	private function getMenupagesList() {
+		global $WT_TREE;
+		
 		$args                = array();
 		$args['module_name'] = $this->getName();
-		$args['tree_id']     = WT_GED_ID;
+		$args['tree_id']     = $WT_TREE->getTreeId();
 		return webtrees\Database::prepare(
 			"SELECT block_id, bs1.setting_value AS pages_title, bs2.setting_value AS pages_access" .
 			" FROM `##block` b" .
