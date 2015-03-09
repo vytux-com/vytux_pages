@@ -104,7 +104,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 
 	// Implement WT_Module_Menu
 	public function getMenu() {
-		global $controller;
+		global $controller, $WT_TREE;
 		
 		$args                = array();
 		$args['block_order'] = 0;
@@ -130,7 +130,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 		foreach ($this->getMenupagesList() as $items) {
 			$languages = webtrees\get_block_setting($items->block_id, 'languages');
-			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= WT_USER_ACCESS_LEVEL) {
+			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= webtrees\Auth::accessLevel($WT_TREE)) {
 				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id;
 				$submenu = new webtrees\Menu(webtrees\I18N::translate($items->pages_title), $path, 'menu-my_pages-' . $items->block_id);
 				$menu->addSubmenu($submenu);
@@ -484,7 +484,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 	}
 
 	private function show() {
-		global $controller;
+		global $controller, $WT_TREE;
 		$items_header_description = '';//Add your own header here.
 		$items_id = webtrees\Filter::get('pages_id');
 		$controller = new webtrees\PageController();
@@ -500,7 +500,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 		$items_list = $this->getPagesList();
 		foreach ($items_list as $items) {
 			$languages = webtrees\get_block_setting($items->block_id, 'languages');
-			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= WT_USER_ACCESS_LEVEL) {
+			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= webtrees\Auth::accessLevel($WT_TREE)) {
 				$html .= '<li class="ui-state-default ui-corner-top' . ($items_id==$items->block_id ? ' ui-tabs-selected ui-state-active' : '') . '">' .
 					'<a href="module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id . '">' .
 					'<span title="' . str_replace("{@PERC@}", "%", webtrees\I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))) . '">' . str_replace("{@PERC@}", "%", webtrees\I18N::translate(str_replace("%", "{@PERC@}", $items->pages_title))) . '</span></a></li>';
@@ -510,7 +510,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 		$html .= '<div id="outer_pages_container" style="padding: 1em;">';
 		foreach ($items_list as $items) {
 			$languages = webtrees\get_block_setting($items->block_id, 'languages');
-			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items_id == $items->block_id && $items->pages_access >= WT_USER_ACCESS_LEVEL) {
+			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items_id == $items->block_id && $items->pages_access >= webtrees\Auth::accessLevel($WT_TREE)) {
 				$items_content = str_replace("{@PERC@}", "%", webtrees\I18N::translate(str_replace("%", "{@PERC@}", $items->pages_content)));
 			}
 		}
@@ -531,7 +531,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 		
 		$controller = new webtrees\PageController();
 		$controller
-			->restrictAccess(webtrees\Auth::isAdmin())
+			->restrictAccess(webtrees\Auth::isManager($WT_TREE))
 			->setPageTitle($this->getTitle())
 			->pageHeader();
 
