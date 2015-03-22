@@ -30,24 +30,6 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 
 	public function __construct() {
 		parent::__construct('vytux_pages');
-		// Load any local user translations
-		if (is_dir(WT_MODULES_DIR . $this->getName() . '/language')) {
-			if (file_exists(WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.mo')) {
-				webtrees\I18N::addTranslation(
-					new Zend_Translate('gettext', WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.mo', WT_LOCALE)
-				);
-			}
-			if (file_exists(WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.php')) {
-				webtrees\I18N::addTranslation(
-					new Zend_Translate('array', WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.php', WT_LOCALE)
-				);
-			}
-			if (file_exists(WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.csv')) {
-				webtrees\I18N::addTranslation(
-					new Zend_Translate('csv', WT_MODULES_DIR . $this->getName() . '/language/' . WT_LOCALE . '.csv', WT_LOCALE)
-				);
-			}
-		}
 	}
 
 	// Extend class WT_Module
