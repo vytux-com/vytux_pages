@@ -26,7 +26,7 @@ namespace Vytux\webtrees_vytux_pages;
 //
 use Fisharebest\Webtrees as webtrees;
 
-class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockInterface, webtrees\ModuleConfigInterface, webtrees\ModuleMenuInterface {
+class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\ModuleBlockInterface, webtrees\ModuleConfigInterface, webtrees\ModuleMenuInterface {
 
 	public function __construct() {
 		parent::__construct('vytux_pages');
@@ -111,7 +111,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 		$menu = new webtrees\Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $default_block, 'menu-my_pages', 'down');
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 		foreach ($this->getMenupagesList() as $items) {
-			$languages = webtrees\get_block_setting($items->block_id, 'languages');
+			$languages = $this->getBlockSetting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= webtrees\Auth::accessLevel($WT_TREE)) {
 				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id;
 				$submenu = new webtrees\Menu(webtrees\I18N::translate($items->pages_title), $path, 'menu-my_pages-' . $items->block_id);
@@ -178,16 +178,18 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 				)->execute($args);
 				$block_id = webtrees\Database::getInstance()->lastInsertId();
 			}
-			webtrees\set_block_setting($block_id, 'pages_title', webtrees\Filter::post('pages_title'));
-			webtrees\set_block_setting($block_id, 'pages_content', webtrees\Filter::post('pages_content')); // allow html
-			webtrees\set_block_setting($block_id, 'pages_access', webtrees\Filter::post('pages_access'));
+			$this->setBlockSetting($block_id, 'pages_title', webtrees\Filter::post('pages_title'));
+			$this->setBlockSetting($block_id, 'pages_content', webtrees\Filter::post('pages_content')); // allow html
+			$this->setBlockSetting($block_id, 'pages_access', webtrees\Filter::post('pages_access'));
 			$languages = array();
-			foreach (webtrees\I18N::installedLanguages() as $code=>$name) {
+			foreach (webtrees\I18N::installedLocales() as $locale) {
+				$code = $locale->languageTag();
+				$name = $locale->endonym();
 				if (webtrees\Filter::postBool('lang_'.$code)) {
 					$languages[] = $code;
 				}
 			}
-			webtrees\set_block_setting($block_id, 'languages', implode(',', $languages));
+			$this->setBlockSetting($block_id, 'languages', implode(',', $languages));
 			$this->config();
 		} else {
 			$block_id = webtrees\Filter::get('block_id');
@@ -195,9 +197,9 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 			$controller->restrictAccess(webtrees\Auth::isEditor($WT_TREE));
 			if ($block_id) {
 				$controller->setPageTitle(webtrees\I18N::translate('Edit pages'));
-				$items_title      = webtrees\get_block_setting($block_id, 'pages_title');
-				$items_content    = webtrees\get_block_setting($block_id, 'pages_content');
-				$items_access     = webtrees\get_block_setting($block_id, 'pages_access');
+				$items_title      = $this->getBlockSetting($block_id, 'pages_title');
+				$items_content    = $this->getBlockSetting($block_id, 'pages_content');
+				$items_access     = $this->getBlockSetting($block_id, 'pages_access');
 				$args['block_id'] = $block_id;
 				$block_order      = webtrees\Database::prepare(
 					"SELECT block_order FROM `##block` WHERE block_id=:block_id"
@@ -278,12 +280,14 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 					</label>
 					<div class="row col-sm-9">
 						<?php 
-							$accepted_languages=explode(',', webtrees\get_block_setting($block_id, 'languages'));
-							foreach (webtrees\I18N::installedLanguages() as $locale => $language) {
-								$checked = in_array($locale, $accepted_languages) ? 'checked' : ''; 
+							$accepted_languages=explode(',', $this->getBlockSetting($block_id, 'languages'));
+							foreach (webtrees\I18N::installedLocales() as $locale) {
+								$code = $locale->languageTag();
+								$name = $locale->endonym();
+								$checked = in_array($code, $accepted_languages) ? 'checked' : ''; 
 						?>
 								<div class="col-sm-3">
-									<label class="checkbox-inline "><input type="checkbox" name="lang_<?php echo $locale; ?>" <?php echo $checked; ?> ><?php echo $language; ?></label>
+									<label class="checkbox-inline "><input type="checkbox" name="lang_<?php echo $code; ?>" <?php echo $checked; ?> ><?php echo $name; ?></label>
 								</div>
 						<?php 
 							}
@@ -481,7 +485,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 				'<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">';
 		$items_list = $this->getPagesList();
 		foreach ($items_list as $items) {
-			$languages = webtrees\get_block_setting($items->block_id, 'languages');
+			$languages = $this->getBlockSetting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= webtrees\Auth::accessLevel($WT_TREE)) {
 				$html .= '<li class="ui-state-default ui-corner-top' . ($items_id==$items->block_id ? ' ui-tabs-selected ui-state-active' : '') . '">' .
 					'<a href="module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id . '">' .
@@ -491,7 +495,7 @@ class VytuxPagesModule extends webtrees\Module implements webtrees\ModuleBlockIn
 		$html .= '</ul>';
 		$html .= '<div id="outer_pages_container" style="padding: 1em;">';
 		foreach ($items_list as $items) {
-			$languages = webtrees\get_block_setting($items->block_id, 'languages');
+			$languages = $this->getBlockSetting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items_id == $items->block_id && $items->pages_access >= webtrees\Auth::accessLevel($WT_TREE)) {
 				$items_content = str_replace("{@PERC@}", "%", webtrees\I18N::translate(str_replace("%", "{@PERC@}", $items->pages_content)));
 			}
