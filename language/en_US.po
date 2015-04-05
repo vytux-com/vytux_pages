@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: vytux_menu2\n"
-"POT-Creation-Date: 2015-04-05 08:46+1000\n"
-"PO-Revision-Date: 2015-04-05 08:48+1000\n"
+"Project-Id-Version: vytux_pages\n"
+"POT-Creation-Date: 2015-04-05 11:49+1000\n"
+"PO-Revision-Date: 2015-04-05 11:50+1000\n"
 "Last-Translator: Vytautas Krivickas <vytautas.krivickas@gmail.com>\n"
 "Language-Team: Vytux webtrees <webtrees@vytux.com>\n"
 "Language: en_US\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.7.1\n"
 "X-Poedit-KeywordsList: translate;noop;plural:1,2\n"
-"X-Poedit-Basepath: ..\\..\n"
+"X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -28,19 +28,25 @@ msgstr ""
 msgid "Display resource pages."
 msgstr ""
 
-#: module.php:122 module.php:199
+#: module.php:122
 msgid "Edit pages"
 msgstr ""
 
-#: module.php:211
-msgid "Add pages"
+#: module.php:199
+msgid "Edit page"
 msgstr ""
 
-#: module.php:229 module.php:633
+#: module.php:211 module.php:655
+msgid "Add page"
+msgstr ""
+
+# Do not translate. Already in webtrees core.
+#: module.php:229 module.php:629
 msgid "Control panel"
 msgstr ""
 
-#: module.php:230 module.php:634
+# Do not translate. Already in webtrees core.
+#: module.php:230 module.php:630
 msgid "Module administration"
 msgstr ""
 
@@ -49,7 +55,7 @@ msgid "General"
 msgstr ""
 
 # Do not translate. Already in webtrees core.
-#: module.php:243 module.php:678
+#: module.php:243 module.php:674
 msgid "Title"
 msgstr ""
 
@@ -70,89 +76,79 @@ msgid "Visibility and Access"
 msgstr ""
 
 #: module.php:302
-msgid "Pages position"
+msgid "Page position"
 msgstr ""
 
 #: module.php:317
-msgid "This field controls the order in which the pages are displayed."
-msgstr ""
-
-#: module.php:319
 msgid ""
-"You do not have to enter the numbers sequentially. If you leave holes in the "
+"This field controls the order in which the pages are displayed.<br><br>You "
+"do not have to enter the numbers sequentially. If you leave holes in the "
 "numbering scheme, you can insert other pages later. For example, if you use "
 "the numbers 1, 6, 11, 16, you can later insert pages with the missing "
 "sequence numbers. Negative numbers and zero are allowed, and can be used to "
-"insert menu items in front of the first one."
+"insert menu items in front of the first one.<br><br>When more than one page "
+"has the same position number, only one of these pages will be visible."
 msgstr ""
 
-#: module.php:321
-msgid ""
-"When more than one page has the same position number, only one of these "
-"pages will be visible."
+#: module.php:323
+msgid "Page visibility"
 msgstr ""
 
-#: module.php:327
-msgid "Pages visibility"
-msgstr ""
-
-#: module.php:330 module.php:688
+#: module.php:326 module.php:684
 msgid "All"
 msgstr ""
 
-#: module.php:334
+#: module.php:330
 msgid ""
 "You can determine whether this page will be visible regardless of family "
 "tree, or whether it will be visible only to the current family tree."
 msgstr ""
 
 # Do not translate. Already in webtrees core.
-#: module.php:340
+#: module.php:336
 msgid "Access level"
 msgstr ""
 
-#: module.php:350
+# Do not translate. Already in webtrees core.
+#: module.php:346
 msgid "save"
 msgstr ""
 
-#: module.php:354
+# Do not translate. Already in webtrees core.
+#: module.php:350
 msgid "cancel"
 msgstr ""
 
-#: module.php:477
+#: module.php:473
 msgid "Resource pages"
 msgstr ""
 
-#: module.php:506
+#: module.php:502
 msgid "No content found for current access level and language"
 msgstr ""
 
 # Do not translate. Already in webtrees core.
-#: module.php:642
+#: module.php:638
 msgid "Family tree"
 msgstr ""
 
 # Do not translate. Already in webtrees core.
-#: module.php:650
+#: module.php:646
 msgid "show"
 msgstr ""
 
-#: module.php:659
-msgid "Add page"
-msgstr ""
-
-#: module.php:668
+#: module.php:664
 msgid "ReadMe"
 msgstr ""
 
-#: module.php:677
+#: module.php:673
 msgid "Position"
 msgstr ""
 
-#: module.php:679
+#: module.php:675
 msgid "Controls"
 msgstr ""
 
-#: module.php:725
+#: module.php:721
 msgid "Are you sure you want to delete this page?"
 msgstr ""

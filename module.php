@@ -196,7 +196,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 			$controller = new webtrees\PageController();
 			$controller->restrictAccess(webtrees\Auth::isEditor($WT_TREE));
 			if ($block_id) {
-				$controller->setPageTitle(webtrees\I18N::translate('Edit pages'));
+				$controller->setPageTitle(webtrees\I18N::translate('Edit page'));
 				$items_title      = $this->getBlockSetting($block_id, 'pages_title');
 				$items_content    = $this->getBlockSetting($block_id, 'pages_content');
 				$items_access     = $this->getBlockSetting($block_id, 'pages_access');
@@ -208,7 +208,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 					"SELECT gedcom_id FROM `##block` WHERE block_id=:block_id"
 				)->execute($args)->fetchOne();
 			} else {
-				$controller->setPageTitle(webtrees\I18N::translate('Add pages'));
+				$controller->setPageTitle(webtrees\I18N::translate('Add page'));
 				$items_title         = '';
 				$items_content       = '';
 				$items_access        = 1;
@@ -226,8 +226,8 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 			?>
 			
 			<ol class="breadcrumb small">
-				<li><a href="admin.php"><?php echo webtrees\I18N::translate('Control panel'); ?></a></li>
-				<li><a href="admin_modules.php"><?php echo webtrees\I18N::translate('Module administration'); ?></a></li>
+				<li><a href="admin.php"><?php echo /* I18N: Do NOT translate. Part of webtrees core. */ webtrees\I18N::translate('Control panel'); ?></a></li>
+				<li><a href="admin_modules.php"><?php echo /* I18N: Do NOT translate. Part of webtrees core. */ webtrees\I18N::translate('Module administration'); ?></a></li>
 				<li><a href="module.php?mod=<?php echo $this->getName(); ?>&mod_action=admin_config"><?php echo webtrees\I18N::translate($this->getTitle()); ?></a></li>
 				<li class="active"><?php echo $controller->getPageTitle(); ?></li>
 			</ol>
@@ -299,7 +299,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 				
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="block_order">
-						<?php echo webtrees\I18N::translate('Pages position'); ?>
+						<?php echo webtrees\I18N::translate('Page position'); ?>
 					</label>
 					<div class="col-sm-9">
 						<input
@@ -314,17 +314,13 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 					</div>
 					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
 						<?php 
-							echo webtrees\I18N::translate('This field controls the order in which the pages are displayed.'),
-							'<br><br>',
-							webtrees\I18N::translate('You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.'),
-							'<br><br>',
-							webtrees\I18N::translate('When more than one page has the same position number, only one of these pages will be visible.');
+							echo webtrees\I18N::translate('This field controls the order in which the pages are displayed.<br><br>You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.<br><br>When more than one page has the same position number, only one of these pages will be visible.');
 						?>
 					</span>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-3" for="block_order">
-						<?php echo webtrees\I18N::translate('Pages visibility'); ?>
+						<?php echo webtrees\I18N::translate('Page visibility'); ?>
 					</label>
 					<div class="col-sm-9">
 						<?php echo webtrees\select_edit_control('gedcom_id', webtrees\Tree::getIdList(), webtrees\I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
@@ -347,11 +343,11 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 				<div class="row col-sm-9 col-sm-offset-3">
 					<button class="btn btn-primary" type="submit">
 						<i class="fa fa-check"></i>
-						<?php echo webtrees\I18N::translate('save'); ?>
+						<?php echo /* I18N: Do NOT translate. Part of webtrees core. */ webtrees\I18N::translate('save'); ?>
 					</button>
 					<button class="btn" type="button" onclick="window.location='<?php echo $this->getConfigLink(); ?>';">
 						<i class="fa fa-close"></i>
-						<?php echo webtrees\I18N::translate('cancel'); ?>
+						<?php echo /* I18N: Do NOT translate. Part of webtrees core. */ webtrees\I18N::translate('cancel'); ?>
 					</button>
 				</div>
 			</form>
@@ -630,8 +626,8 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 		</style>
 		
 		<ol class="breadcrumb small">
-			<li><a href="admin.php"><?php echo webtrees\I18N::translate('Control panel'); ?></a></li>
-			<li><a href="admin_modules.php"><?php echo webtrees\I18N::translate('Module administration'); ?></a></li>
+			<li><a href="admin.php"><?php echo /* I18N: Do NOT translate. Part of webtrees core. */ webtrees\I18N::translate('Control panel'); ?></a></li>
+			<li><a href="admin_modules.php"><?php echo /* I18N: Do NOT translate. Part of webtrees core. */ webtrees\I18N::translate('Module administration'); ?></a></li>
 			<li class="active"><?php echo $controller->getPageTitle(); ?></li>
 		</ol>
 		
