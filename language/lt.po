@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vytux_pages\n"
 "POT-Creation-Date: 2015-04-05 11:49+1000\n"
-"PO-Revision-Date: 2015-04-05 05:51+0300\n"
+"PO-Revision-Date: 2015-04-05 07:12+0300\n"
 "Last-Translator: Vytautas <vytautas.krivickas@gmail.com>\n"
 "Language-Team: none\n"
 "Language: lt\n"
@@ -22,11 +22,11 @@ msgstr ""
 
 #: module.php:41
 msgid "Resources"
-msgstr ""
+msgstr "Puslapiai"
 
 #: module.php:46
 msgid "Display resource pages."
-msgstr ""
+msgstr "Rodyti puslapius."
 
 #: module.php:122
 msgid "Edit pages"
@@ -61,23 +61,23 @@ msgstr ""
 
 #: module.php:259
 msgid "Content"
-msgstr ""
+msgstr "Turinys"
 
 #: module.php:275
 msgid "Languages"
-msgstr ""
+msgstr "Kalbos"
 
 #: module.php:279
 msgid "Show this page for which languages?"
-msgstr ""
+msgstr "Kuriom kalbom rodyti šį puslapį?"
 
 #: module.php:298
 msgid "Visibility and Access"
-msgstr ""
+msgstr "Matomumas ir prieiga"
 
 #: module.php:302
 msgid "Page position"
-msgstr ""
+msgstr "Puslapio padėtis"
 
 #: module.php:317
 msgid "This field controls the order in which the pages are displayed.<br><br>You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.<br><br>When more than one page has the same position number, only one of these pages will be visible."
@@ -85,7 +85,7 @@ msgstr ""
 
 #: module.php:323
 msgid "Page visibility"
-msgstr ""
+msgstr "Puslapio matomumas"
 
 #: module.php:326 module.php:684
 msgid "All"
@@ -98,7 +98,7 @@ msgstr ""
 # Do not translate. Already in webtrees core.
 #: module.php:336
 msgid "Access level"
-msgstr ""
+msgstr "Prieigos lygis"
 
 # Do not translate. Already in webtrees core.
 #: module.php:346
