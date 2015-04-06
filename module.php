@@ -108,18 +108,18 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 		}
 		
 		//-- main PAGES menu item
-		$menu = new webtrees\Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $default_block, 'menu-my_pages', 'down');
+		$menu = new webtrees\Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $default_block, $this->getName(), 'down');
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 		foreach ($this->getMenupagesList() as $items) {
 			$languages = $this->getBlockSetting($items->block_id, 'languages');
 			if ((!$languages || in_array(WT_LOCALE, explode(',', $languages))) && $items->pages_access >= webtrees\Auth::accessLevel($WT_TREE)) {
 				$path = 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $items->block_id;
-				$submenu = new webtrees\Menu(webtrees\I18N::translate($items->pages_title), $path, 'menu-my_pages-' . $items->block_id);
+				$submenu = new webtrees\Menu(webtrees\I18N::translate($items->pages_title), $path, $this->getName() . '-' . $items->block_id);
 				$menu->addSubmenu($submenu);
 			}
 		}
 		if (webtrees\Auth::isAdmin()) {
-			$submenu = new webtrees\Menu(webtrees\I18N::translate('Edit pages'), $this->getConfigLink(), 'menu-my_pages-edit');
+			$submenu = new webtrees\Menu(webtrees\I18N::translate('Edit pages'), $this->getConfigLink(), $this->getName() . '-edit');
 			$menu->addSubmenu($submenu);
 		}
 		return $menu;
