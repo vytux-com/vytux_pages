@@ -50,6 +50,7 @@ msgstr ""
 msgid "Module administration"
 msgstr ""
 
+# Do not translate. Already in webtrees core.
 #: module.php:239
 msgid "General"
 msgstr ""
@@ -59,10 +60,12 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+# Do not translate. Already in webtrees core.
 #: module.php:259
 msgid "Content"
 msgstr ""
 
+# Do not translate. Already in webtrees core.
 #: module.php:275
 msgid "Languages"
 msgstr ""
@@ -87,6 +90,7 @@ msgstr ""
 msgid "Page visibility"
 msgstr ""
 
+# Do not translate. Already in webtrees core.
 #: module.php:326 module.php:684
 msgid "All"
 msgstr ""
