@@ -80,14 +80,7 @@ msgid "Page position"
 msgstr ""
 
 #: module.php:317
-msgid ""
-"This field controls the order in which the pages are displayed.<br><br>You "
-"do not have to enter the numbers sequentially. If you leave holes in the "
-"numbering scheme, you can insert other pages later. For example, if you use "
-"the numbers 1, 6, 11, 16, you can later insert pages with the missing "
-"sequence numbers. Negative numbers and zero are allowed, and can be used to "
-"insert menu items in front of the first one.<br><br>When more than one page "
-"has the same position number, only one of these pages will be visible."
+msgid "This field controls the order in which the pages are displayed.<br><br>You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.<br><br>When more than one page has the same position number, only one of these pages will be visible."
 msgstr ""
 
 #: module.php:323
@@ -99,9 +92,7 @@ msgid "All"
 msgstr ""
 
 #: module.php:330
-msgid ""
-"You can determine whether this page will be visible regardless of family "
-"tree, or whether it will be visible only to the current family tree."
+msgid "You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree."
 msgstr ""
 
 # Do not translate. Already in webtrees core.
