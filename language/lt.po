@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vytux_pages\n"
 "POT-Creation-Date: 2015-04-05 11:49+1000\n"
-"PO-Revision-Date: 2015-04-07 00:57+0300\n"
+"PO-Revision-Date: 2015-04-07 10:48+0300\n"
 "Last-Translator: Vytautas <vytautas.krivickas@gmail.com>\n"
 "Language-Team: none\n"
 "Language: lt\n"
@@ -63,7 +63,7 @@ msgstr ""
 # Do not translate. Already in webtrees core.
 #: module.php:259
 msgid "Content"
-msgstr "Turinys"
+msgstr ""
 
 # Do not translate. Already in webtrees core.
 #: module.php:275
@@ -76,7 +76,7 @@ msgstr "Kuriom kalbom rodyti šį puslapį?"
 
 #: module.php:298
 msgid "Visibility and Access"
-msgstr ""
+msgstr "Meniu matomumas"
 
 #: module.php:302
 msgid "Page position"
@@ -146,4 +146,4 @@ msgstr "Valdymas"
 
 #: module.php:721
 msgid "Are you sure you want to delete this page?"
-msgstr ""
+msgstr "Ar tikrai ištrinti šį puslapį?"
