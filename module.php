@@ -183,10 +183,8 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 			$this->setBlockSetting($block_id, 'pages_access', webtrees\Filter::post('pages_access'));
 			$languages = array();
 			foreach (webtrees\I18N::installedLocales() as $locale) {
-				$code = $locale->languageTag();
-				$name = $locale->endonym();
-				if (webtrees\Filter::postBool('lang_'.$code)) {
-					$languages[] = $code;
+				if (webtrees\Filter::postBool('lang_'.$locale->languageTag())) {
+					$languages[] = $locale->languageTag();
 				}
 			}
 			$this->setBlockSetting($block_id, 'languages', implode(',', $languages));
@@ -278,16 +276,15 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 					<label class="control-label col-sm-3" for="lang_*">
 						<?php echo webtrees\I18N::translate('Show this page for which languages?'); ?>
 					</label>
-					<div class="row col-sm-9">
+					<div class="col-sm-9">
 						<?php 
 							$accepted_languages=explode(',', $this->getBlockSetting($block_id, 'languages'));
 							foreach (webtrees\I18N::installedLocales() as $locale) {
-								$code = $locale->languageTag();
-								$name = $locale->endonym();
-								$checked = in_array($code, $accepted_languages) ? 'checked' : ''; 
 						?>
-								<div class="col-sm-3">
-									<label class="checkbox-inline "><input type="checkbox" name="lang_<?php echo $code; ?>" <?php echo $checked; ?> ><?php echo $name; ?></label>
+								<div class="checkbox">
+									<label title="<?php echo $locale->languageTag(); ?>">
+										<input type="checkbox" name="lang_<?php echo $locale->languageTag(); ?>" <?php echo in_array($locale->languageTag(), $accepted_languages) ? 'checked' : ''; ?> ><?php echo $locale->endonym(); ?>
+									</label>
 								</div>
 						<?php 
 							}
