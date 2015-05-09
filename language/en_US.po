@@ -40,36 +40,6 @@ msgstr ""
 msgid "Add page"
 msgstr ""
 
-# Do not translate. Already in webtrees core.
-#: module.php:229 module.php:629
-msgid "Control panel"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:230 module.php:630
-msgid "Module administration"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:239
-msgid "General"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:243 module.php:674
-msgid "Title"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:259
-msgid "Content"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:275
-msgid "Languages"
-msgstr ""
-
 #: module.php:279
 msgid "Show this page for which languages?"
 msgstr ""
@@ -90,23 +60,8 @@ msgstr ""
 msgid "Page visibility"
 msgstr ""
 
-# Do not translate. Already in webtrees core.
-#: module.php:326 module.php:684
-msgid "All"
-msgstr ""
-
 #: module.php:330
 msgid "You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree."
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:336
-msgid "Access level"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:346
-msgid "save"
 msgstr ""
 
 #: module.php:350
@@ -119,16 +74,6 @@ msgstr ""
 
 #: module.php:502
 msgid "No content found for current access level and language"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:638
-msgid "Family tree"
-msgstr ""
-
-# Do not translate. Already in webtrees core.
-#: module.php:646
-msgid "show"
 msgstr ""
 
 #: module.php:664
