@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vytux_pages\n"
 "POT-Creation-Date: 2015-04-05 11:49+1000\n"
-"PO-Revision-Date: 2015-05-29 10:52+0300\n"
-"Last-Translator: Jamie <jaco_fyn@hotmail.com>\n"
+"PO-Revision-Date: 2015-05-29 10:53+0300\n"
+"Last-Translator: Vytautas Krivickas <vytautas.krivickas@gmail.com>\n"
 "Language-Team: none\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +42,7 @@ msgstr "Opret side"
 
 #: module.php:279
 msgid "Show this page for which languages?"
-msgstr "Vælg sprog"
+msgstr "Vælg sprog?"
 
 #: module.php:298
 msgid "Visibility and Access"
@@ -62,7 +62,7 @@ msgstr "Synlighed"
 
 #: module.php:330
 msgid "You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree."
-msgstr "Du kan beslutte om siden kun skal vises for det aktuelle træ eller uanset valg af træer"
+msgstr "Du kan beslutte om siden kun skal vises for det aktuelle træ eller uanset valg af træer."
 
 #: module.php:350
 msgid "cancel"
