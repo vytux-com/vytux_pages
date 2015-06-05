@@ -26,7 +26,7 @@ namespace Vytux\webtrees_vytux_pages;
 //
 use Fisharebest\Webtrees as webtrees;
 
-class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\ModuleBlockInterface, webtrees\ModuleConfigInterface, webtrees\ModuleMenuInterface {
+class VytuxPagesModule extends webtrees\Module\AbstractModule implements webtrees\Module\ModuleBlockInterface, webtrees\Module\ModuleConfigInterface, webtrees\Module\ModuleMenuInterface {
 
 	public function __construct() {
 		parent::__construct('vytux_pages');
@@ -191,7 +191,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 			$this->config();
 		} else {
 			$block_id = webtrees\Filter::get('block_id');
-			$controller = new webtrees\PageController();
+			$controller = new webtrees\Controller\PageController();
 			$controller->restrictAccess(webtrees\Auth::isEditor($WT_TREE));
 			if ($block_id) {
 				$controller->setPageTitle(webtrees\I18N::translate('Edit page'));
@@ -320,7 +320,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 						<?php echo webtrees\I18N::translate('Page visibility'); ?>
 					</label>
 					<div class="col-sm-9">
-						<?php echo webtrees\select_edit_control('gedcom_id', webtrees\Tree::getIdList(), webtrees\I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
+						<?php echo select_edit_control('gedcom_id', webtrees\Tree::getIdList(), webtrees\I18N::translate('All'), $gedcom_id, 'class="form-control"'); ?>
 					</div>
 					<span class="help-block col-sm-9 col-sm-offset-3 small text-muted">
 						<?php 
@@ -466,7 +466,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 		global $controller, $WT_TREE;
 		$items_header_description = '';//Add your own header here.
 		$items_id = webtrees\Filter::get('pages_id');
-		$controller = new webtrees\PageController();
+		$controller = new webtrees\Controller\PageController();
 		$controller->setPageTitle(webtrees\I18N::translate('Resource pages'))//Edit this line for a different summary page title
 			->pageHeader();
 		// HTML common to all pages
@@ -508,7 +508,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 	private function config() {
 		global $WT_TREE;
 		
-		$controller = new webtrees\PageController();
+		$controller = new webtrees\Controller\PageController();
 		$controller
 			->restrictAccess(webtrees\Auth::isManager($WT_TREE))
 			->setPageTitle($this->getTitle())
@@ -637,7 +637,7 @@ class VytuxPagesModule extends webtrees\AbstractModule implements webtrees\Modul
 					<input type="hidden" name="mod" value="<?php echo  $this->getName(); ?>">
 					<input type="hidden" name="mod_action" value="admin_config">
 					<div class="col-sm-9 col-xs-9" style="padding:0;">
-						<?php echo webtrees\select_edit_control('ged', webtrees\Tree::getNameList(), null, $WT_TREE->getName(), 'class="form-control"'); ?>
+						<?php echo select_edit_control('ged', webtrees\Tree::getNameList(), null, $WT_TREE->getName(), 'class="form-control"'); ?>
 					</div>
 					<div class="col-sm-3" style="padding:0;">
 						<input type="submit" class="btn btn-primary" value="<?php echo webtrees\I18N::translate('show'); ?>">
