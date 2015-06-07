@@ -33,5 +33,10 @@ html[dir='rtl'] #pages_config {direction:rtl; text-align:right;}
 #page-create {float:left;}
 html[dir='rtl'] #page-create {float:right;}
 
+/* Mobile low resolution viewport */
+@media (max-width: 600px) {
+	li.vytux_pages {background:url(pages-mobile.png) no-repeat 50% 50%}
+}
+
 /* Page styles */
 div#pages-container {margin:0 auto; overflow:hidden; padding:20px; width:95%;}
