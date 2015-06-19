@@ -108,7 +108,7 @@ class VytuxPagesModule extends webtrees\Module\AbstractModule implements webtree
 		}
 		
 		//-- main PAGES menu item
-		$menu = new webtrees\Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $default_block, $this->getName(), 'down');
+		$menu = new webtrees\Menu($this->getMenuTitle(), 'module.php?mod=' . $this->getName() . '&amp;mod_action=show&amp;pages_id=' . $default_block, $this->getName());
 		$menu->addClass('menuitem', 'menuitem_hover', '');
 		foreach ($this->getMenupagesList() as $items) {
 			$languages = $this->getBlockSetting($items->block_id, 'languages');
