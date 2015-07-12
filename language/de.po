@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vytux_pages\n"
 "POT-Creation-Date: 2015-04-05 11:49+1000\n"
-"PO-Revision-Date: 2015-04-05 11:49+1000\n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2015-07-12 14:36+0300\n"
+"Last-Translator: Max Musterman <news@zacherweb.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.3-dev\n"
 "X-Poedit-KeywordsList: translate;noop;plural:1,2\n"
 "X-Poedit-Basepath: ..\n"
@@ -18,35 +18,35 @@ msgstr ""
 
 #: module.php:37
 msgid "Vytux Pages"
-msgstr "Vytux Pages"
+msgstr "Vytux Pages(Seiten)"
 
 #: module.php:41
 msgid "Resources"
-msgstr "Resources"
+msgstr "Quellen"
 
 #: module.php:46
 msgid "Display resource pages."
-msgstr "Display resource pages."
+msgstr "Zeige Quellseiten."
 
 #: module.php:122
 msgid "Edit pages"
-msgstr "Edit pages"
+msgstr "Seiten bearbeiten"
 
 #: module.php:199
 msgid "Edit page"
-msgstr "Edit page"
+msgstr "Seite bearbeiten"
 
 #: module.php:211 module.php:655
 msgid "Add page"
-msgstr "Add page"
+msgstr "Seite hinzufügen"
 
 #: module.php:279
 msgid "Show this page for which languages?"
-msgstr "Show this page for which languages?"
+msgstr "Für welche Sprachen, soll die Seite angezeigt werden?"
 
 #: module.php:298
 msgid "Visibility and Access"
-msgstr "Visibility and Access"
+msgstr "Sichtbarkeit und Zugriff"
 
 #: module.php:302
 msgid "Page position"
@@ -54,31 +54,31 @@ msgstr "Page position"
 
 #: module.php:317
 msgid "This field controls the order in which the pages are displayed.<br><br>You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.<br><br>When more than one page has the same position number, only one of these pages will be visible."
-msgstr "This field controls the order in which the pages are displayed.<br><br>You do not have to enter the numbers sequentially. If you leave holes in the numbering scheme, you can insert other pages later. For example, if you use the numbers 1, 6, 11, 16, you can later insert pages with the missing sequence numbers. Negative numbers and zero are allowed, and can be used to insert menu items in front of the first one.<br><br>When more than one page has the same position number, only one of these pages will be visible."
+msgstr "Du musst die Nummern nicht aufeinander folgende eingeben. <br><br>Wenn du Lücken in der Reihenfolge lässt, kannst du später einfach Menüs hinzufügen. Zum Beispiel, wenn du die Nummern 1, 6, 11, 16 benutzt, kannst du später Menüs mit den fehlenden Nummern einfügen. Negative Nummern und die Null sind erlaubt und können dazu benutzt werden ein Menü vor allen anderen zu platzieren."
 
 #: module.php:323
 msgid "Page visibility"
-msgstr "Page visibility"
+msgstr "Seiten Sichtbarkeit"
 
 #: module.php:330
 msgid "You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree."
-msgstr "You can determine whether this page will be visible regardless of family tree, or whether it will be visible only to the current family tree."
+msgstr "Du kannst entscheiden, ob das Menü unabhängig vom Familienstammbau angezeigt wird oder ob es nur beim aktuellen Stammbaum angezeigt wird."
 
 #: module.php:350
 msgid "cancel"
-msgstr "cancel"
+msgstr "Abbruch"
 
 #: module.php:473
 msgid "Resource pages"
-msgstr "Resource pages"
+msgstr "Quellseiten"
 
 #: module.php:502
 msgid "No content found for current access level and language"
-msgstr "No content found for current access level and language"
+msgstr "Es wurde kein Inhalt für die aktuellen Zugriffsrechte und Sprache gefunden"
 
 #: module.php:664
 msgid "ReadMe"
-msgstr "ReadMe"
+msgstr "Ließ mich"
 
 #: module.php:673
 msgid "Position"
@@ -86,8 +86,8 @@ msgstr "Position"
 
 #: module.php:675
 msgid "Controls"
-msgstr "Controls"
+msgstr "Steuerung"
 
 #: module.php:721
 msgid "Are you sure you want to delete this page?"
-msgstr "Are you sure you want to delete this page?"
+msgstr "Bist du dir sicher, dass du diese Seite löschen möchtest?"
