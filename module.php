@@ -219,7 +219,7 @@ class VytuxPagesModule extends webtrees\Module\AbstractModule implements webtree
 			$controller->pageHeader();
 			
 			if (webtrees\Module::getModuleByName('ckeditor')) {
-				webtrees\CkeditorModule::enableEditor($controller);
+				webtrees\Module\CkeditorModule::enableEditor($controller);
 			}
 			?>
 			
@@ -279,7 +279,7 @@ class VytuxPagesModule extends webtrees\Module\AbstractModule implements webtree
 					<div class="col-sm-9">
 						<?php 
 							$accepted_languages=explode(',', $this->getBlockSetting($block_id, 'languages'));
-							foreach (webtrees\I18N::installedLocales() as $locale) {
+							foreach (webtrees\I18N::activeLocales() as $locale) {
 						?>
 								<div class="checkbox">
 									<label title="<?php echo $locale->languageTag(); ?>">
@@ -333,7 +333,7 @@ class VytuxPagesModule extends webtrees\Module\AbstractModule implements webtree
 						<?php echo webtrees\I18N::translate('Access level'); ?>
 					</label>
 					<div class="col-sm-9">
-						<?php echo webtrees\webtrees\Functions\FunctionsEdit::editFieldAccessLevel('pages_access', $items_access, 'class="form-control"'); ?>
+						<?php echo webtrees\Functions\FunctionsEdit::editFieldAccessLevel('pages_access', $items_access, 'class="form-control"'); ?>
 					</div>
 				</div>
 				
