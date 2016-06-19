@@ -28,6 +28,9 @@ use Fisharebest\Webtrees as webtrees;
 
 class VytuxPagesModule extends webtrees\Module\AbstractModule implements webtrees\Module\ModuleBlockInterface, webtrees\Module\ModuleConfigInterface, webtrees\Module\ModuleMenuInterface {
 
+    const CUSTOM_VERSION = '1.7.5';
+    const CUSTOM_WEBSITE = 'https://vytux.com/main/projects/webtrees/vytux_pages/';
+
 	public function __construct() {
 		parent::__construct('vytux_pages');
 	}
